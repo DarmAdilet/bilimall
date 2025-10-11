@@ -13,6 +13,9 @@ from pptx import Presentation
 from pptx.util import Pt
 from pptx.dml.color import RGBColor
 
+import os
+
+
 # .env файлын жүктеу
 load_dotenv()
 # API кілтті жүктеу
