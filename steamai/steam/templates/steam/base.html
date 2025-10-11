@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}BilimALL AI{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+          body {
+        font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+        background-image: url('static/images/photo7.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        }
+    .navbar {
+        display: flex;
+        align-items: center; /* Элементтерді тігінен туралау */
+        justify-content: space-between; /* Логотип сол жақта, сілтемелер оң жақта */
+        padding: 10px 20px;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 15px; /* Басты бет пен Бастау арасындағы арақашықтық */
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: #333;
+        font-size: 12px;
+        padding: 10px 15px;
+    }
+
+
+    .logo {
+        font-size: 14px;
+        font-weight: bold;
+        color: blue;
+    }
+
+    .highlight {
+        color: blue;
+    }
+
+    .ai {
+        color: #ffcc00; /* Сары түс */
+    }
+
+
+
+    h2 {
+    font-size: 50px; /* Үлкен шрифт */
+    font-weight: bold; /* Қалың (жирный) жазу */
+    color: blue;
+    text-align: center; /* Ортаға туралау */
+    }
+
+    h2 span {
+        color: #ffcc00; /* "AI" бөлігін сары түске бояу */
+    }
+
+    p {
+        font-size: 16px; /* Сипаттаманың өлшемі */
+        color: black;
+        text-align: center; /* Ортаға туралау */
+        max-width: 600px; /* Тым ұзын болмауы үшін */
+        margin: 10px auto; /* Ортаға қою */
+    }
+  .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+         .button-card h3 {
+        color: #1a237e; /* Көк түстің қою реңкі */
+        font-size: 18px;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .button-card p {
+        color: #333; /* Қараға жақын, бірақ тым қатты емес */
+        font-size: 14px;
+        font-weight: 500;
+        text-align: center;
+    }
+
+    .button-card {
+        background: white;
+        padding: 8px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        width: 260px;
+        cursor: pointer;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .button-card:hover {
+        transform: scale(1.08);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    }
+
+
+
+.container {
+    width: 80%;
+    margin: 30px auto;
+}
+
+h3 {
+    font-size: 24px;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+}
+
+.ai-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    justify-content: center;
+}
+
+.ai-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.ai-card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.ai-card h4 {
+    font-size: 18px;
+    color: #002984;
+    margin: 10px 0;
+}
+
+.ai-card p {
+    font-size: 14px;
+    color: #444;
+    padding: 0 10px;
+}
+
+      /* Төменгі бөлім (Footer) */
+      footer {
+        background-color: #333;
+        color: #fff;
+        padding: 20px 0;
+        margin-top: 40px;
+        text-align: center;
+      }
+
+    footer {
+        background-color: white;;
+        padding: 20px 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .footer-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .links {
+        display: flex;
+        gap: 40px;
+    }
+
+    .column h4 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .column ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .column ul li {
+        margin-bottom: 5px;
+    }
+
+    .column ul li a {
+        text-decoration: none;
+        color: #333;
+    }
+
+    .footer-bottom {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 10px;
+        color: white;
+    }
+
+
+  </style>
+</head>
+<body>
+   <div class="navbar">
+    <span  class="logo">Bilim<span class="highlight">ALL</span> <span class="ai">AI</span></span>
+    <div class="nav-links">
+        <a href="/">Басты бет</a>
+        <a href="{% url 'chat' %}" >Бастау</a>
+    </div>
+</div>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+   <!-- Чат-бот батырмасы (Telegram сілтемесімен) -->
+<div style="position: fixed; bottom: 20px; right: 20px; z-index: 999;">
+  <a href="https://t.me/SENIN_BOT_USERNAME" target="_blank">
+    <button style="background-color: #0056d2; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; padding: 0; font-size: 28px; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+      <img src="https://img.freepik.com/free-vector/chatbot-chat-message-vectorart_78370-4104.jpg?t=st=1745739191~exp=1745742791~hmac=3996895a5b8648ea32d6d5a4df9d3ff5733d2a36fa35d3a8054da1d858fcc35c&w=826" alt="Chat" style="width: 100%; border-radius: 50%;">
+    </button>
+  </a>
+</div>
+<footer style="background-color: #f9f9f9; padding: 50px 0; font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+  <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;">
+
+    <!-- Logo + Social -->
+    <div style="flex: 1 1 250px; margin-bottom: 30px;">
+  <h2 style="font-size: 28px; margin-bottom: 10px;">
+    <span style="color: blue;">BilimALL</span><span style="color: gold;">AI</span>
+  </h2>
+
+  <!-- Contact Section -->
+  <div style="margin-top: 30px;">
+
+    <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+
+      <!-- First Row -->
+      <div style="display: flex; width: 100%; gap: 12px;">
+        <a href="#" style="display: flex; align-items: center; color: #333; text-decoration: none;">
+          <img src="https://cdn-icons-png.flaticon.com/24/2111/2111463.png" alt="Instagram" style="margin-right: 5px;"> Instagram
+        </a>
+        <a href="#" style="display: flex; align-items: center; color: #333; text-decoration: none;">
+          <img src="https://cdn-icons-png.flaticon.com/24/733/733547.png" alt="Facebook" style="margin-right: 5px;"> Facebook
+        </a>
+        <a href="#" style="display: flex; align-items: center; color: #333; text-decoration: none;">
+          <img src="https://cdn-icons-png.flaticon.com/24/2111/2111646.png" alt="Telegram" style="margin-right: 5px;"> Telegram
+        </a>
+      </div>
+
+      <!-- Second Row -->
+      <div style="display: flex; width: 100%; gap: 12px; margin-top: 10px;">
+        <a href="#" style="display: flex; align-items: center; color: #333; text-decoration: none;">
+          <img src="https://cdn-icons-png.flaticon.com/24/733/733585.png" alt="WhatsApp" style="margin-right: 5px;"> WhatsApp
+        </a>
+        <a href="#" style="display: flex; align-items: center; color: #333; text-decoration: none;">
+          <img src="https://cdn-icons-png.flaticon.com/24/5968/5968534.png" alt="Mail.ru" style="margin-right: 5px;"> Mail.ru
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+    <!-- Links -->
+    <div style="flex: 2 1 700px; display: flex; justify-content: space-around; flex-wrap: wrap; margin-bottom: 30px;">
+
+      <div>
+        <h4 style="margin-bottom: 10px; font-weight: bold;">Компания</h4>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin-bottom: 8px;"><a href="#" style="color: #333; text-decoration: none;">Марапаттар</a></li>
+          <li><a href="#" style="color: #333; text-decoration: none;">Зерттеулер</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 style="margin-bottom: 10px; font-weight: bold;">Университет</h4>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin-bottom: 8px;"><a href="#" style="color: #333; text-decoration: none;">Zhubanov University</a></li>
+          <li><a href="#" style="color: #333; text-decoration: none;">Faculty of Physics and Mathematics</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 style="margin-bottom: 10px; font-weight: bold;">Қызметтер</h4>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin-bottom: 8px;"><a href="{% url 'chat' %}" style="color: #333; text-decoration: none;">BilimALL AI Chat</a></li>
+          <li><a href="{% url 'slide' %}" style="color: #333; text-decoration: none;">BilimALL AI Slide Generator</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Copyright -->
+  <div style="text-align: center; margin-top: 20px; font-size: 14px; color: #777;">
+    © 2025 BilimALL AI. Қазақстан, Ақтөбе қаласы, Қ.Жұбанов атындағы Ақтөбе өңірлік университеті
+  </div>
+</footer>
+
+
+
+
+</body>
+</html>

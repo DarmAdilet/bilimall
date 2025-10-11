@@ -1,0 +1,11 @@
+Django~=5.1.7
+protobuf~=6.31.1
+dotenv~=0.9.9
+python-dotenv~=1.0.1
+python-pptx~=1.0.2
+
+
+gunicorn
+whitenoise
+dj-database-url
+psycopg2-binary

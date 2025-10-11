@@ -1,0 +1,57 @@
+{% extends 'steam/base.html' %}
+{% load static %}
+{% block title %}Басты бет - BilimALL AI{% endblock %}
+
+{% block content %}
+  <style>
+    /* Жұмсақ айналдыру (Smooth Scroll) */
+    html {
+      scroll-behavior: smooth;
+    }
+  </style>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+      <h2>BilimALL <span>AI</span></h2>
+        <p>
+            BilimALL AI – пәндер арасындағы байланысты анықтайтын ақылды білім платформасы.
+        </p>
+
+       <div class="buttons">
+            <div class="button-card" onclick="window.open('{% url 'chat' %}', '_blank')">
+                <h3> 🚀 Бастау</h3>
+                <p style="color: black;">BilimALL көмегімен жаңа білім алуға кіріс!</p>
+            </div>
+
+            <div class="button-card" onclick="window.open('{% url 'slide' %}', '_blank')">
+             <h3>ℹ️ BilimALL AI Slide Generator </h3>
+              <p style="color: black;">Слайд генерациясы</p>
+            </div>
+        </div>
+
+
+    <div class="container">
+      <h3>BilimALL AI мүмкіндіктері</h3>
+      <div class="ai-grid">
+        <div class="ai-card">
+          <img src="{% static 'images/photo1.png' %}" alt="AI Image">
+          <h4>Тақырыпты талдау</h4>
+          <p>Информатикадағы кез келген тақырыпты жаратылыстану пәндерімен байланыстыру.</p>
+        </div>
+        <div class="ai-card">
+          <img src="{% static 'images/photo2.png' %}" alt="AI Image">
+          <h4>Ақылды іздеу жүйесі</h4>
+          <p>Кітаптың сыныбын, тақырыбын, бетін және баспасын автоматты түрде анықтау.</p>
+        </div>
+        <div class="ai-card">
+          <img src="{% static 'images/photo3.png' %}" alt="AI Image">
+          <h4>Пәндер арасындағы байланысты анықтау</h4>
+          <p>Әрбір тақырыптың пәндер арасындағы байланысын көрсететін жүйе.</p>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,167 @@
+/* Жалпы стильдер */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+  }
+
+  /* Контейнер */
+  .container {
+    width: 85%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Хэдер */
+  header {
+    background-color: #0048b4; /* Көкшіл түс */
+    color: #fff;
+    padding: 15px 0;
+  }
+
+  header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .logo span {
+    color: #ffcc00; /* "AI" деген жеріне сары түс */
+  }
+
+  /* Навигация */
+  nav ul {
+    list-style: none;
+  }
+
+  nav ul li {
+    display: inline-block;
+    margin-left: 20px;
+  }
+
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  nav ul li a:hover {
+    text-decoration: underline;
+  }
+  nav ul li a.register {
+    background-color: #ffcc00;
+    color: #333;
+  }
+
+  nav ul li a.login {
+    background-color: #fff;
+    color: #333;
+  }
+
+  nav ul li a.register:hover,
+  nav ul li a.login:hover {
+    background-color: #e6b800;
+    color: #fff;
+  }
+
+  /* Хиро-секция (Hero) */
+  .hero {
+    background: linear-gradient(
+      rgba(0, 72, 180, 0.7),
+      rgba(0, 72, 180, 0.7)
+    ),
+    url('https://via.placeholder.com/1600x900') center/cover no-repeat;
+    color: #fff;
+    text-align: center;
+    padding: 80px 0;
+  }
+
+  .hero-content h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+
+  /* AI бөлімі */
+ /* AI бөлімі */
+.ai-section {
+    background-color: #f9f9f9;
+    padding: 60px 0;
+}
+
+/* Тақырып */
+.ai-section h3 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #003580;
+    margin-bottom: 40px;
+}
+
+/* Торлы орналасу */
+.ai-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+
+/* Карточка */
+.ai-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    width: 320px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Hover эффектісі */
+.ai-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Сурет */
+.ai-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-bottom: 3px solid #0048b4;
+}
+
+/* Тақырыпша */
+.ai-card h4 {
+    margin: 15px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #003580;
+}
+
+/* Мәтін */
+.ai-card p {
+    margin: 0 15px 20px;
+    line-height: 1.6;
+    font-size: 1rem;
+    color: #333;
+}
+
+
+  /* Төменгі бөлім (Footer) */
+  footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    margin-top: 40px;
+    text-align: center;
+  }
