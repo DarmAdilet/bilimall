@@ -1,0 +1,556 @@
+{% extends 'steam/base2.html' %}
+{% load static %}
+
+{% block title %}Python Ойыны - BilimAll{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .game-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .game-header {
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+    }
+
+    .game-header h1 {
+        font-size: 48px;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .game-info {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 15px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        backdrop-filter: blur(10px);
+    }
+
+    .game-info p {
+        color: white;
+        margin: 5px 0;
+        font-size: 16px;
+    }
+
+    .stats-bar {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .stat-card {
+        flex: 1;
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .stat-value {
+        font-size: 32px;
+        font-weight: bold;
+        color: #667eea;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        font-size: 14px;
+        color: #666;
+        text-transform: uppercase;
+    }
+
+    .game-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        margin-bottom: 20px;
+    }
+
+    .level-badge {
+        display: inline-block;
+        padding: 8px 20px;
+        background: linear-gradient(135deg, #FFD700, #FFA500);
+        color: white;
+        border-radius: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    .question-text {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+
+    .code-block {
+        background: #282c34;
+        color: #abb2bf;
+        padding: 20px;
+        border-radius: 10px;
+        font-family: 'Courier New', monospace;
+        font-size: 16px;
+        margin: 15px 0;
+        overflow-x: auto;
+        border-left: 4px solid #667eea;
+    }
+
+    .options-grid {
+        display: grid;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .option-btn {
+        background: #f8f9fa;
+        border: 3px solid #e0e0e0;
+        padding: 20px;
+        border-radius: 15px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: left;
+    }
+
+    .option-btn:hover:not(:disabled) {
+        background: #e3f2fd;
+        border-color: #667eea;
+        transform: translateX(5px);
+    }
+
+    .option-btn.correct {
+        background: #d4edda;
+        border-color: #28a745;
+        animation: correctPulse 0.5s ease;
+    }
+
+    .option-btn.wrong {
+        background: #f8d7da;
+        border-color: #dc3545;
+        animation: wrongShake 0.5s ease;
+    }
+
+    .option-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    @keyframes correctPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    @keyframes wrongShake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+    }
+
+    .feedback-box {
+        padding: 20px;
+        border-radius: 15px;
+        margin: 20px 0;
+        font-size: 16px;
+        line-height: 1.6;
+        display: none;
+    }
+
+    .feedback-box.show {
+        display: block;
+        animation: slideIn 0.3s ease;
+    }
+
+    .feedback-box.correct {
+        background: #d4edda;
+        border: 2px solid #28a745;
+        color: #155724;
+    }
+
+    .feedback-box.wrong {
+        background: #f8d7da;
+        border: 2px solid #dc3545;
+        color: #721c24;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .next-btn {
+        width: 100%;
+        padding: 18px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: none;
+    }
+
+    .next-btn.show {
+        display: block;
+    }
+
+    .next-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .result-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        display: none;
+    }
+
+    .result-card.show {
+        display: block;
+        animation: slideIn 0.5s ease;
+    }
+
+    .result-icon {
+        font-size: 80px;
+        margin-bottom: 20px;
+    }
+
+    .result-title {
+        font-size: 32px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .result-score {
+        font-size: 48px;
+        font-weight: bold;
+        color: #667eea;
+        margin: 20px 0;
+    }
+
+    .result-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+
+    .action-btn {
+        padding: 15px 30px;
+        border: none;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .action-btn.primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .action-btn.secondary {
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .loading {
+        text-align: center;
+        padding: 40px;
+        color: white;
+    }
+
+    .spinner {
+        border: 4px solid rgba(255,255,255,0.3);
+        border-top: 4px solid white;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+        .game-header h1 {
+            font-size: 36px;
+        }
+
+        .game-card {
+            padding: 20px;
+        }
+
+        .result-actions {
+            flex-direction: column;
+        }
+
+        .stats-bar {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="game-container">
+    <div class="game-header">
+        <h1>🐍 Python Ойыны</h1>
+    </div>
+
+    <div class="game-info">
+        <p><strong>Тақырып:</strong> <span id="gameTopic">{{ topic }}</span></p>
+        <p><strong>Деңгей:</strong> <span id="gameLevel">{{ level }}</span></p>
+    </div>
+
+    <div class="stats-bar">
+        <div class="stat-card">
+            <div class="stat-value" id="currentQuestion">0</div>
+            <div class="stat-label">Сұрақ</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="correctAnswers">0</div>
+            <div class="stat-label">Дұрыс</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="totalScore">0</div>
+            <div class="stat-label">Балл</div>
+        </div>
+    </div>
+
+    <div class="loading" id="loadingScreen">
+        <div class="spinner"></div>
+        <p>Сұрақтар генерацияланып жатыр...</p>
+    </div>
+
+    <div class="game-card" id="gameCard" style="display: none;">
+        <div class="level-badge" id="questionLevel">Деңгей 1</div>
+
+        <div class="question-text" id="questionText"></div>
+
+        <div class="code-block" id="codeBlock" style="display: none;"></div>
+
+        <div class="options-grid" id="optionsGrid"></div>
+
+        <div class="feedback-box" id="feedbackBox"></div>
+
+        <button class="next-btn" id="nextBtn">Келесі сұрақ →</button>
+    </div>
+
+    <div class="result-card" id="resultCard">
+        <div class="result-icon">🎉</div>
+        <div class="result-title">Ойын аяқталды!</div>
+        <div class="result-score"><span id="finalScore">0</span>/10</div>
+        <p>Сіздің нәтижеңіз: <strong id="resultMessage"></strong></p>
+
+        <div class="result-actions">
+            <button class="action-btn primary" onclick="restartGame()">🔄 Қайта бастау</button>
+            <button class="action-btn secondary" onclick="goToExercises()">📚 Тапсырмаларға оралу</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let questions = [];
+    let currentQuestionIndex = 0;
+    let correctCount = 0;
+    let totalScore = 0;
+
+    window.addEventListener('DOMContentLoaded', async function() {
+        const topic = '{{ topic }}';
+        const level = '{{ level }}';
+
+        await generateQuestions(topic, level);
+    });
+
+    async function generateQuestions(topic, level) {
+        try {
+            const csrftoken = getCookie('csrftoken');
+
+            const response = await fetch('/api/generate-game-questions/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({
+                    topic: topic,
+                    level: level
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                questions = data.questions;
+                document.getElementById('loadingScreen').style.display = 'none';
+                document.getElementById('gameCard').style.display = 'block';
+                loadQuestion();
+            } else {
+                alert('Қате: ' + data.error);
+            }
+        } catch (error) {
+            alert('Сервермен байланыс қатесі: ' + error.message);
+        }
+    }
+
+    function loadQuestion() {
+        if (currentQuestionIndex >= questions.length) {
+            showResults();
+            return;
+        }
+
+        const question = questions[currentQuestionIndex];
+
+        document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+        document.getElementById('questionLevel').textContent = `Сұрақ ${currentQuestionIndex + 1}/${questions.length}`;
+        document.getElementById('questionText').textContent = question.question;
+
+        const codeBlock = document.getElementById('codeBlock');
+        if (question.code) {
+            codeBlock.textContent = question.code;
+            codeBlock.style.display = 'block';
+        } else {
+            codeBlock.style.display = 'none';
+        }
+
+        const optionsGrid = document.getElementById('optionsGrid');
+        optionsGrid.innerHTML = '';
+
+        question.options.forEach((option, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = option;
+            btn.onclick = () => checkAnswer(index);
+            optionsGrid.appendChild(btn);
+        });
+
+        document.getElementById('feedbackBox').classList.remove('show');
+        document.getElementById('nextBtn').classList.remove('show');
+    }
+
+    function checkAnswer(selectedIndex) {
+        const question = questions[currentQuestionIndex];
+        const buttons = document.querySelectorAll('.option-btn');
+        const feedbackBox = document.getElementById('feedbackBox');
+
+        buttons.forEach(btn => btn.disabled = true);
+
+        if (selectedIndex === question.correctIndex) {
+            buttons[selectedIndex].classList.add('correct');
+            correctCount++;
+            totalScore += 10;
+
+            feedbackBox.className = 'feedback-box correct show';
+            feedbackBox.innerHTML = `<strong>✅ Дұрыс!</strong><br>${question.explanation || ''}`;
+
+            document.getElementById('correctAnswers').textContent = correctCount;
+            document.getElementById('totalScore').textContent = totalScore;
+        } else {
+            buttons[selectedIndex].classList.add('wrong');
+            buttons[question.correctIndex].classList.add('correct');
+
+            feedbackBox.className = 'feedback-box wrong show';
+            feedbackBox.innerHTML = `<strong>❌ Қате!</strong><br>Дұрыс жауап: ${question.options[question.correctIndex]}<br>${question.explanation || ''}`;
+        }
+
+        document.getElementById('nextBtn').classList.add('show');
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', function() {
+        currentQuestionIndex++;
+        loadQuestion();
+    });
+
+    function showResults() {
+        document.getElementById('gameCard').style.display = 'none';
+        document.getElementById('resultCard').classList.add('show');
+        document.getElementById('finalScore').textContent = correctCount;
+
+        let message = '';
+        const percentage = (correctCount / questions.length) * 100;
+
+        if (percentage >= 90) {
+            message = 'Керемет! 🌟';
+        } else if (percentage >= 70) {
+            message = 'Жақсы! 👏';
+        } else if (percentage >= 50) {
+            message = 'Жаман емес! 💪';
+        } else {
+            message = 'Одан да жақсы болуға болады! 📚';
+        }
+
+        document.getElementById('resultMessage').textContent = message;
+    }
+
+    function restartGame() {
+        currentQuestionIndex = 0;
+        correctCount = 0;
+        totalScore = 0;
+
+        document.getElementById('correctAnswers').textContent = '0';
+        document.getElementById('totalScore').textContent = '0';
+        document.getElementById('resultCard').classList.remove('show');
+        document.getElementById('gameCard').style.display = 'block';
+
+        loadQuestion();
+    }
+
+    function goToExercises() {
+        window.location.href = '/exercise/';
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+{% endblock %}

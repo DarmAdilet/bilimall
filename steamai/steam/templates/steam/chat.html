@@ -9,9 +9,9 @@
 
 .container-wrapper {
     display: flex;
-    height: 100vh; /* Толық экран биіктігі */
+    height: 100vh;
     padding: 10px;
-    gap: 10px; /* Контейнерлар арасындағы қашықтық */
+    gap: 10px;
 }
 
 .chat-container {
@@ -21,17 +21,16 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     overflow: hidden;
-    height: 85vh; /* Биіктікті экранға сәйкестендіру */
+    height: 85vh;
 }
 
 .messages-box {
-    flex-grow: 1; /* Барлық бос орынды алу */
-    overflow-y: auto; /* Вертикалды скроллинг */
+    flex-grow: 1;
+    overflow-y: auto;
     padding: 10px;
     max-height: calc(85vh - 150px);
-    scroll-behavior: smooth; /* Скроллингті тегіс ету */
+    scroll-behavior: smooth;
 }
-
 
     .messages-list {
       padding-left: 0;
@@ -61,15 +60,49 @@
       align-self: flex-start;
     }
 
+    /* Жүктелу индикаторы */
+    .loading-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      background-color: #fff3cd;
+      border-radius: 5px;
+      align-self: flex-start;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #3498db;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Қате хабарламасы */
+    .error-message {
+      background-color: #f8d7da;
+      color: #721c24;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+
 .message-form {
     display: flex;
     padding: 10px;
     background-color: white;
     border-top: 1px solid #ddd;
     width: 100%;
-    flex-shrink: 0; /* Форманы жоғалып кетуден сақтайды */
-    position: sticky; /* Форманы төменде бекіту */
-    bottom: 0; /* Форманы төменгі жақта бекіту */
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
 }
 
 .message-input {
@@ -86,6 +119,11 @@
     font-size: 16px;
 }
 
+.btn-send:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
     .side-panel {
       flex: 1;
       margin-left: 15px;
@@ -93,18 +131,43 @@
       border: 1px solid #ddd;
       border-radius: 5px;
       background-color: #f8f9fa;
+      height: 85vh;
+      overflow-y: auto;
     }
+
  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap');
 
 .science-heading {
    font-family: 'Montserrat', sans-serif;
-  font-weight: 300; /* Light */
-  color: #212529; /* Қара түс */
+  font-weight: 300;
+  color: #212529;
   text-align: center;
   border-bottom: 1px solid #dee2e6;
   padding-bottom: 8px;
   margin-bottom: 20px;
   font-size: 20px;
+}
+
+.subject-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: white;
+    transition: transform 0.2s;
+}
+
+.subject-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.subject-item img {
+    width: 50px;
+    height: auto;
+    margin-right: 10px;
+    border-radius: 5px;
 }
 </style>
 {% endblock %}
@@ -113,15 +176,28 @@
 <div class="container-wrapper">
   <div class="chat-container">
     <div class="card flex-grow-1">
-      <div class="card-header bg-primary text-white">IPKO</div>
+      <div class="card-header bg-primary text-white">IPKO - Информатика пәндік байланысы</div>
       <div class="card-body messages-box" id="messagesBox">
-        <ul class="list-unstyled messages-list"></ul>
+        <ul class="list-unstyled messages-list">
+          <!-- Бастапқы хабарлама -->
+          <li class="message received">
+            <div class="message-text">
+              <div class="message-sender"><b>BilimAll AI</b></div>
+              <div class="message-content">
+                Сәлеметсіз бе! 👋<br><br>
+                Мен сізге <strong>Информатика</strong> пәнінің басқа жаратылыстану пәндерімен
+                (Математика, Физика, Химия, Биология, География) байланысын табуға көмектесемін.<br><br>
+                <strong>Мысал:</strong> "Алгоритм", "Циклдер", "Жасанды интелект" деп жазыңыз.
+              </div>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
     <form class="message-form">
       {% csrf_token %}
       <div class="input-group">
-        <input type="text" name="topic" class="form-control message-input" placeholder="Кілттік сөз енгіз...">
+        <input type="text" name="topic" class="form-control message-input" placeholder="Кілттік сөз енгіз..." autocomplete="off">
         <div class="input-group-append">
           <button type="submit" class="btn btn-primary btn-send">Жіберу</button>
         </div>
@@ -129,74 +205,58 @@
     </form>
   </div>
 
-
-<div class="side-panel" style="height: 85vh; overflow-y: auto;">
+  <div class="side-panel">
     <h4 class="science-heading">🔬 Жаратылыстану бағытындағы кітаптар</h4>
 
-<div style="max-height: 70vh; overflow-y: auto;"> <!-- скролл жасау -->
-  <div style="display: flex; align-items: center; margin-bottom: 10px;">
-    <img src="https://i.pinimg.com/736x/13/06/24/1306243ab4f7b31de2249b941da51f49.jpg" alt="Информатика 5" style="width: 50px; height: auto; margin-right: 10px; border-radius: 5px;">
-    <div>
-      <div>Информатика</div>
-      <a href="{% url 'informatika' %}" target="_blank" class="btn btn-sm btn-outline-primary mt-1">Кітапты ашу</a>
-    </div>
-  </div>
-</div>
-  <br>
-
-  <div style="max-height: 70vh; overflow-y: auto;"> <!-- скролл жасау -->
-  <div style="display: flex; align-items: center; margin-bottom: 10px;">
-    <img src="https://i.pinimg.com/736x/14/3b/34/143b3476a255a2836123900600f09163.jpg" alt="Математика" style="width: 50px; height: auto; margin-right: 10px; border-radius: 5px;">
-    <div>
-      <div>Математика</div>
-      <a href="{% url 'matem' %}" target="_blank" class="btn btn-sm btn-outline-primary mt-1">Кітапты ашу</a>
-    </div>
-  </div>
-    </div>
-<br>
-  <div style="max-height: 70vh; overflow-y: auto;"> <!-- скролл жасау -->
-  <div style="display: flex; align-items: center; margin-bottom: 10px;">
-    <img src="https://i.pinimg.com/736x/ab/26/1d/ab261d55de66244a6b48339a5a1dec0d.jpg" alt="Биология" style="width: 50px; height: auto; margin-right: 10px; border-radius: 5px;">
-    <div>
-      <div>Биология</div>
-      <a href="{% url 'biology' %}" target="_blank" class="btn btn-sm btn-outline-primary mt-1">Кітапты ашу</a>
-    </div>
-  </div>
-    </div>
-<br>
-  <div style="max-height: 70vh; overflow-y: auto;"> <!-- скролл жасау -->
-  <div style="display: flex; align-items: center; margin-bottom: 10px;">
-    <img src="https://i.pinimg.com/736x/e3/4a/79/e34a792ca476096c470018d6e238d622.jpg" alt="Химия" style="width: 50px; height: auto; margin-right: 10px; border-radius: 5px;">
-    <div>
-      <div>Химия</div>
-      <a href="{% url 'ximia' %}" target="_blank" class="btn btn-sm btn-outline-primary mt-1">Кітапты ашу</a>
-    </div>
-  </div>
-     </div>
-<br>
-  <div style="max-height: 70vh; overflow-y: auto;"> <!-- скролл жасау -->
-  <div style="display: flex; align-items: center; margin-bottom: 10px;">
-    <img src="https://i.pinimg.com/736x/02/68/53/02685322db903333746bfc040d3d3e71.jpg" alt="География" style="width: 50px; height: auto; margin-right: 10px; border-radius: 5px;">
-    <div>
-      <div>География</div>
-      <a href="{% url 'geography' %}" target="_blank" class="btn btn-sm btn-outline-primary mt-1">Кітапты ашу</a>
-    </div>
-  </div>
-       </div>
-  <br>
-  <div style="max-height: 70vh; overflow-y: auto;"> <!-- скролл жасау -->
-    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-      <img src="https://i.pinimg.com/736x/c5/85/ff/c585fff6524ef47925decb0ef6c66aa0.jpg" alt="Физика" style="width: 50px; height: auto; margin-right: 10px; border-radius: 5px;">
+    <div class="subject-item">
+      <img src="https://i.pinimg.com/736x/13/06/24/1306243ab4f7b31de2249b941da51f49.jpg" alt="Информатика">
       <div>
-        <div>Физика</div>
+        <div><strong>Информатика</strong></div>
+        <a href="{% url 'informatika' %}" target="_blank" class="btn btn-sm btn-outline-primary mt-1">Кітапты ашу</a>
+      </div>
+    </div>
+
+    <div class="subject-item">
+      <img src="https://i.pinimg.com/736x/14/3b/34/143b3476a255a2836123900600f09163.jpg" alt="Математика">
+      <div>
+        <div><strong>Математика</strong></div>
+        <a href="{% url 'matem' %}" target="_blank" class="btn btn-sm btn-outline-primary mt-1">Кітапты ашу</a>
+      </div>
+    </div>
+
+    <div class="subject-item">
+      <img src="https://i.pinimg.com/736x/ab/26/1d/ab261d55de66244a6b48339a5a1dec0d.jpg" alt="Биология">
+      <div>
+        <div><strong>Биология</strong></div>
+        <a href="{% url 'biology' %}" target="_blank" class="btn btn-sm btn-outline-primary mt-1">Кітапты ашу</a>
+      </div>
+    </div>
+
+    <div class="subject-item">
+      <img src="https://i.pinimg.com/736x/e3/4a/79/e34a792ca476096c470018d6e238d622.jpg" alt="Химия">
+      <div>
+        <div><strong>Химия</strong></div>
+        <a href="{% url 'ximia' %}" target="_blank" class="btn btn-sm btn-outline-primary mt-1">Кітапты ашу</a>
+      </div>
+    </div>
+
+    <div class="subject-item">
+      <img src="https://i.pinimg.com/736x/02/68/53/02685322db903333746bfc040d3d3e71.jpg" alt="География">
+      <div>
+        <div><strong>География</strong></div>
+        <a href="{% url 'geography' %}" target="_blank" class="btn btn-sm btn-outline-primary mt-1">Кітапты ашу</a>
+      </div>
+    </div>
+
+    <div class="subject-item">
+      <img src="https://i.pinimg.com/736x/c5/85/ff/c585fff6524ef47925decb0ef6c66aa0.jpg" alt="Физика">
+      <div>
+        <div><strong>Физика</strong></div>
         <a href="{% url 'fizika' %}" target="_blank" class="btn btn-sm btn-outline-primary mt-1">Кітапты ашу</a>
       </div>
     </div>
-      </div>
-
-
-</div>
   </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
@@ -204,15 +264,57 @@
     const messageForm = document.querySelector('.message-form');
     const messageInput = document.querySelector('.message-input');
     const messagesBox = document.getElementById('messagesBox');
+    const sendButton = document.querySelector('.btn-send');
+
+    // Жүктелу индикаторын қосу
+    function showLoading() {
+        const loadingItem = document.createElement('li');
+        loadingItem.classList.add('message', 'received');
+        loadingItem.id = 'loading-indicator';
+        loadingItem.innerHTML = `
+            <div class="message-text loading-indicator">
+                <div class="spinner"></div>
+                <div>Жауап дайындалуда...</div>
+            </div>
+        `;
+        messagesList.appendChild(loadingItem);
+        messagesBox.scrollTop = messagesBox.scrollHeight;
+        sendButton.disabled = true;
+    }
+
+    // Жүктелу индикаторын жою
+    function hideLoading() {
+        const loadingItem = document.getElementById('loading-indicator');
+        if (loadingItem) {
+            loadingItem.remove();
+        }
+        sendButton.disabled = false;
+    }
+
+    // Қате хабарламасын көрсету
+    function showError(errorMessage) {
+        const errorItem = document.createElement('li');
+        errorItem.classList.add('message', 'received');
+        errorItem.innerHTML = `
+            <div class="message-text error-message">
+                <div class="message-sender"><b>Қате</b></div>
+                <div class="message-content">❌ ${errorMessage}</div>
+            </div>
+        `;
+        messagesList.appendChild(errorItem);
+        messagesBox.scrollTop = messagesBox.scrollHeight;
+    }
 
     messageForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
         const message = messageInput.value.trim();
         if (message.length === 0) {
+            alert('Хабарлама енгізіңіз!');
             return;
         }
 
+        // Пайдаланушы хабарламасын қосу
         const userMessageItem = document.createElement('li');
         userMessageItem.classList.add('message', 'sent');
         userMessageItem.innerHTML = `
@@ -226,6 +328,10 @@
         messageInput.value = '';
         messagesBox.scrollTop = messagesBox.scrollHeight;
 
+        // Жүктелу индикаторын көрсету
+        showLoading();
+
+        // API-ға сұраныс жіберу
         fetch('/chat1/', {
             method: 'POST',
             headers: {
@@ -234,25 +340,47 @@
             },
             body: JSON.stringify({ 'message': message })
         })
-        .then(response => response.json())
+        .then(response => {
+            hideLoading();
+
+            if (!response.ok) {
+                throw new Error(`HTTP қатесі: ${response.status}`);
+            }
+
+            return response.json();
+        })
         .then(data => {
-            const botResponse = data.response;
+            if (data.response) {
+                const botMessageItem = document.createElement('li');
+                botMessageItem.classList.add('message', 'received');
+                botMessageItem.innerHTML = `
+                    <div class="message-text">
+                        <div class="message-sender"><b>BilimAll AI</b></div>
+                        <div class="message-content">${marked.parse(data.response)}</div>
+                    </div>
+                `;
 
-            const botMessageItem = document.createElement('li');
-            botMessageItem.classList.add('message', 'received');
-            botMessageItem.innerHTML = `
-                <div class="message-text">
-                    <div class="message-sender"><b>Bilimall</b></div>
-                    <div class="message-content">${marked.parse(botResponse)}</div>
-                </div>
-            `;
-
-            messagesList.appendChild(botMessageItem);
-            messagesBox.scrollTop = messagesBox.scrollHeight;
+                messagesList.appendChild(botMessageItem);
+                messagesBox.scrollTop = messagesBox.scrollHeight;
+            } else if (data.error) {
+                showError(data.error);
+            } else {
+                showError('Белгісіз қате орын алды');
+            }
         })
         .catch(error => {
-            console.error('Error:', error);
+            hideLoading();
+            console.error('Толық қате:', error);
+            showError(`Байланыс қатесі: ${error.message}`);
         });
+    });
+
+    // Enter басқанда жіберу
+    messageInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            messageForm.dispatchEvent(new Event('submit'));
+        }
     });
 </script>
 {% endblock %}
