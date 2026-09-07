@@ -7,23 +7,22 @@
     overflow: hidden;
   }
 
- .container-wrapper {
-  display: flex;
-  height: 100vh;
-  padding: 10px;
-  gap: 10px;
-}
+  .container-wrapper {
+    display: flex;
+    height: 100vh;
+    padding: 10px;
+    gap: 10px;
+  }
 
-/* Чат енін кішірейту */
-.chat-container {
-  flex: 0.8; /* кішірейді */
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  overflow: hidden;
-  height: 40vh;
-}
+  .chat-container {
+    flex: 0.8;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 40vh;
+  }
 
   .messages-box {
     flex-grow: 1;
@@ -33,9 +32,7 @@
     scroll-behavior: smooth;
   }
 
-  .messages-list {
-    padding-left: 0;
-  }
+  .messages-list { padding-left: 0; }
 
   .message {
     margin-bottom: 15px;
@@ -86,29 +83,26 @@
     font-size: 16px;
   }
 
-  /* Оң жақтағы панельді кеңейту */
-.side-panel {
-  flex: 0.8; /* бұрын 1 болатын */
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  background-color: #f8f9fa;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 40vh;
-  overflow-y: auto;
-}
+  .side-panel {
+    flex: 0.8;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 40vh;
+    overflow-y: auto;
+  }
 
-.slide-preview {
-  flex-grow: 1;
-}
+  .slide-preview { flex-grow: 1; }
 
-.slide-preview img {
-  max-width: 100%;
-  border-radius: 10px;
-  margin-bottom: 15px;
-}
+  .slide-preview img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
 </style>
 {% endblock %}
 
@@ -116,14 +110,15 @@
 <div class="container-wrapper">
   <div class="chat-container">
     <div class="card flex-grow-1">
-      <div class="card-header bg-primary text-white">BilimALL — Слайд генерациясы</div>
+      <div class="card-header bg-primary text-white">BilimALL — Slide Generation</div>
       <div class="card-body messages-box" id="messagesBox">
         <ul class="list-unstyled messages-list">
           <li class="message received">
             <div class="message-text">
               <div class="message-sender"><b>Bilimall</b></div>
               <div class="message-content">
-                Слайд жасау үшін информатика пәнінен тақырыпты және жаратылыстану пәнінің атауын, сыныбын, тақырыбын еңгізіңіз . Мысалы: <i>"Бір өлшемді массив, Алгебра, 9 сынып, сандар тізбегі"</i>
+                To create a slide, enter a Computer Science topic and the name, grade, and topic of a natural science subject.
+                Example: <i>"One-dimensional array, Algebra, Grade 9, number sequences"</i>
               </div>
             </div>
           </li>
@@ -133,20 +128,18 @@
     <form class="message-form">
       {% csrf_token %}
       <div class="input-group">
-        <input type="text" class="form-control message-input" placeholder="Слайд тақырыбын енгізіңіз..." required>
+        <input type="text" class="form-control message-input" placeholder="Enter slide topic..." required>
         <div class="input-group-append">
-          <button type="submit" class="btn btn-success btn-send">Генерациялау</button>
+          <button type="submit" class="btn btn-success btn-send">Generate</button>
         </div>
       </div>
     </form>
   </div>
 
- <div class="side-panel">
-  <h4>Генерацияланған слайд</h4>
-  <div id="slideResult" class="slide-preview">
-    <!-- Бұл жерде тек жүктеу сілтемесі ғана пайда болады -->
+  <div class="side-panel">
+    <h4>Generated Slide</h4>
+    <div id="slideResult" class="slide-preview"></div>
   </div>
-</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -162,22 +155,20 @@
 
     const topic = messageInput.value.trim();
     if (topic.length === 0) {
-      alert('Тақырып енгізіңіз!');
+      alert('Please enter a topic!');
       return;
     }
 
-    // Add loading state
     const sendButton = messageForm.querySelector('button');
     sendButton.disabled = true;
-    sendButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Жүктелуде...';
+    sendButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
 
     try {
-      // Add user message
       const userMessageItem = document.createElement('li');
       userMessageItem.classList.add('message', 'sent');
       userMessageItem.innerHTML = `
         <div class="message-text">
-          <div class="message-sender"><b>Сіз</b></div>
+          <div class="message-sender"><b>You</b></div>
           <div class="message-content">${escapeHtml(topic)}</div>
         </div>
       `;
@@ -185,7 +176,6 @@
       messageInput.value = '';
       messagesBox.scrollTop = messagesBox.scrollHeight;
 
-      // Send request to server
       const response = await fetch('/generate-slide/', {
         method: 'POST',
         headers: {
@@ -195,28 +185,23 @@
         body: JSON.stringify({ topic: topic })
       });
 
-      if (!response.ok) {
-        throw new Error('Сервер қатесі: ' + response.status);
-      }
+      if (!response.ok) throw new Error('Server error: ' + response.status);
 
       const data = await response.json();
 
-     slideResult.innerHTML = data.pptx_url
-  ? `<p>Слайд дайын!</p><a href="${data.pptx_url}" target="_blank" class="btn btn-primary">PPTX жүктеу</a>`
-  : '<p>Файл жасау кезінде қате орын алды</p>';
+      slideResult.innerHTML = data.pptx_url
+        ? `<p>Slide is ready!</p><a href="${data.pptx_url}" target="_blank" class="btn btn-primary">Download PPTX</a>`
+        : '<p>An error occurred while creating the file</p>';
 
-     // Add bot response
     } catch (error) {
-      console.error('Қате:', error);
-      slideResult.innerHTML = '<p style="color: red;">Слайд жасау кезінде қате орын алды: ' + escapeHtml(error.message) + '</p>';
+      console.error('Error:', error);
+      slideResult.innerHTML = '<p style="color: red;">Error creating slide: ' + escapeHtml(error.message) + '</p>';
     } finally {
-      // Reset button state
       sendButton.disabled = false;
-      sendButton.textContent = 'Генерациялау';
+      sendButton.textContent = 'Generate';
     }
   });
 
-  // Simple HTML escaping function
   function escapeHtml(unsafe) {
     return unsafe
       .replace(/&/g, "&amp;")

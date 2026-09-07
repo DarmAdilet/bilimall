@@ -1,10 +1,9 @@
 {% extends 'steam/base.html' %}
 {% load static %}
-{% block title %}Басты бет - BilimALL AI{% endblock %}
+{% block title %}Home - BilimALL AI{% endblock %}
 
 {% block content %}
   <style>
-    /* Жұмсақ айналдыру (Smooth Scroll) */
     html {
       scroll-behavior: smooth;
     }
@@ -17,48 +16,48 @@
 <br>
       <h2>BilimALL <span>AI</span></h2>
         <p>
-            BilimALL AI – пәндер арасындағы байланысты анықтайтын ақылды білім платформасы.
+            BilimALL AI – an intelligent educational platform that identifies connections between subjects.
         </p>
 
        <div class="buttons">
             <div class="button-card" onclick="window.open('{% url 'chat' %}', '_blank')">
-                <h3> 🚀 Бастау</h3>
-                <p style="color: black;">BilimALL көмегімен жаңа білім алуға кіріс!</p>
+                <h3>🚀 Get Started</h3>
+                <p style="color: black;">Start gaining new knowledge with BilimALL!</p>
             </div>
 
             <div class="button-card" onclick="window.open('{% url 'slide' %}', '_blank')">
-             <h3>ℹ️ BilimALL AI Slide Generator </h3>
-              <p style="color: black;">Слайд генерациясы</p>
+                <h3>ℹ️ BilimALL AI Slide Generator</h3>
+                <p style="color: black;">Slide generation</p>
             </div>
-           <div class="button-card" onclick="window.open('{% url 'exercise' %}', '_blank')">
-             <h3>📝 BilimALL AI Тапсырма генераторы</h3>
-              <p style="color: black;">Тапсырма генерациясы</p>
+
+            <div class="button-card" onclick="window.open('{% url 'exercise' %}', '_blank')">
+                <h3>📝 BilimALL AI Exercise Generator</h3>
+                <p style="color: black;">Exercise generation</p>
             </div>
         </div>
 
-
     <div class="container">
-      <h3>BilimALL AI мүмкіндіктері</h3>
+      <h3>BilimALL AI Features</h3>
       <div class="ai-grid">
         <div class="ai-card">
           <img src="{% static 'images/photo1.png' %}" alt="AI Image">
-          <h4>Тақырыпты талдау</h4>
-          <p>Информатикадағы кез келген тақырыпты жаратылыстану пәндерімен байланыстыру.</p>
+          <h4>Topic Analysis</h4>
+          <p>Connect any Computer Science topic with natural science subjects.</p>
         </div>
         <div class="ai-card">
           <img src="{% static 'images/photo2.png' %}" alt="AI Image">
-          <h4>Ақылды іздеу жүйесі</h4>
-          <p>Кітаптың сыныбын, тақырыбын, бетін және баспасын автоматты түрде анықтау.</p>
+          <h4>Smart Search System</h4>
+          <p>Automatically identify the grade, topic, page number, and publisher of a textbook.</p>
         </div>
         <div class="ai-card">
           <img src="{% static 'images/photo3.png' %}" alt="AI Image">
-          <h4>Пәндер арасындағы байланысты анықтау</h4>
-          <p>Әрбір тақырыптың пәндер арасындағы байланысын көрсететін жүйе.</p>
+          <h4>Cross-Subject Connection Detection</h4>
+          <p>A system that shows the connections between subjects for each topic.</p>
         </div>
         <div class="ai-card">
           <img src="{% static 'images/exercise.png' %}" alt="AI Image">
-          <h4>Тапсырма генерациясы</h4>
-          <p>AI көмегімен оқушыларға арналған тапсырмалар мен тесттерді автоматты генерациялау.</p>
+          <h4>Exercise Generation</h4>
+          <p>Automatically generate exercises and tests for students using AI.</p>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 {% extends 'steam/base2.html' %}
 {% load static %}
 
-{% block title %}Тапсырма генерациялау - BilimAll{% endblock %}
+{% block title %}Exercise Generation - BilimAll{% endblock %}
 
 {% block styles %}
 <style>
@@ -269,9 +269,7 @@
         border: 1px solid #f0f0f0;
     }
 
-    .loading-spinner.show {
-        display: block;
-    }
+    .loading-spinner.show { display: block; }
 
     .spinner {
         border: 4px solid #f0f0f0;
@@ -305,9 +303,7 @@
         animation: fadeIn 0.3s ease;
     }
 
-    .error-message.show {
-        display: block;
-    }
+    .error-message.show { display: block; }
 
     .error-message.success {
         background: #d4edda;
@@ -316,37 +312,16 @@
     }
 
     @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     @media (max-width: 768px) {
-        .generation-card {
-            padding: 30px 20px;
-        }
-
-        .filters-row {
-            grid-template-columns: 1fr;
-        }
-
-        .page-header h1 {
-            font-size: 36px;
-        }
-
-        .action-buttons {
-            flex-direction: column;
-        }
-
-        .action-btn {
-            width: 100%;
-            justify-content: center;
-        }
+        .generation-card { padding: 30px 20px; }
+        .filters-row { grid-template-columns: 1fr; }
+        .page-header h1 { font-size: 36px; }
+        .action-buttons { flex-direction: column; }
+        .action-btn { width: 100%; justify-content: center; }
     }
 </style>
 {% endblock %}
@@ -358,7 +333,7 @@
             <span class="bilim-text">BilimALL</span>
             <span class="ai-text">AI</span>
         </h1>
-        <p>Тапсырма генерациясы</p>
+        <p>Exercise Generation</p>
     </div>
 
     <div class="generation-card">
@@ -370,44 +345,44 @@
                        name="topic"
                        id="topicInput"
                        class="search-input"
-                       placeholder="Мысалы: Квадрат теңдеулер, Фотосинтез, Қазақстан тарихы..."
+                       placeholder="Example: Quadratic equations, Photosynthesis, History of Kazakhstan..."
                        required>
             </div>
 
             <div class="filters-row">
                 <select name="format" id="selectedFormat" class="search-input" required>
-                    <option value="" disabled selected hidden>Форматты таңдаңыз</option>
-                    <option value="Тест">📝 Тест</option>
-                    <option value="Тапсырма">📋 Тапсырма</option>
-                    <option value="Сұрақтар">❓ Сұрақтар</option>
-                    <option value="Ойын">🎮 Ойын (Python үйрену)</option>
+                    <option value="" disabled selected hidden>Select format</option>
+                    <option value="Test">📝 Test</option>
+                    <option value="Exercise">📋 Exercise</option>
+                    <option value="Questions">❓ Questions</option>
+                    <option value="Game">🎮 Game (Learn Python)</option>
                 </select>
 
                 <select name="level" id="selectedLevel" class="search-input" required>
-                    <option value="" disabled selected hidden>Сыныпты таңдаңыз</option>
-                    <option value="1-сынып">1-сынып</option>
-                    <option value="2-сынып">2-сынып</option>
-                    <option value="3-сынып">3-сынып</option>
-                    <option value="4-сынып">4-сынып</option>
-                    <option value="5-сынып">5-сынып</option>
-                    <option value="6-сынып">6-сынып</option>
-                    <option value="7-сынып">7-сынып</option>
-                    <option value="8-сынып">8-сынып</option>
-                    <option value="9-сынып">9-сынып</option>
-                    <option value="10-сынып">10-сынып</option>
-                    <option value="11-сынып">11-сынып</option>
+                    <option value="" disabled selected hidden>Select grade</option>
+                    <option value="Grade 1">Grade 1</option>
+                    <option value="Grade 2">Grade 2</option>
+                    <option value="Grade 3">Grade 3</option>
+                    <option value="Grade 4">Grade 4</option>
+                    <option value="Grade 5">Grade 5</option>
+                    <option value="Grade 6">Grade 6</option>
+                    <option value="Grade 7">Grade 7</option>
+                    <option value="Grade 8">Grade 8</option>
+                    <option value="Grade 9">Grade 9</option>
+                    <option value="Grade 10">Grade 10</option>
+                    <option value="Grade 11">Grade 11</option>
                 </select>
             </div>
 
             <button type="submit" class="generate-btn" id="generateBtn">
-                Генерациялау
+                Generate
             </button>
         </form>
     </div>
 
     <div class="loading-spinner" id="loadingSpinner">
         <div class="spinner"></div>
-        <p class="loading-text">Генерациялануда...</p>
+        <p class="loading-text">Generating...</p>
     </div>
 
     <div class="error-message" id="errorMessage"></div>
@@ -416,8 +391,8 @@
         <div class="result-header">
             <div class="icon">✓</div>
             <div class="text">
-                <h3>Сіздің оқушыға беретін тапсырманыз дайын!</h3>
-                <p>Тапсырма сәтті генерацияланды және жүктеуге дайын</p>
+                <h3>Your exercise is ready!</h3>
+                <p>The exercise was successfully generated and is ready to download</p>
             </div>
         </div>
 
@@ -441,15 +416,15 @@
         <div class="action-buttons">
             <button type="button" class="action-btn download" onclick="downloadExerciseWord()">
                 <span>📄</span>
-                <span>Word файлға жүктеу</span>
+                <span>Download as Word</span>
             </button>
             <button type="button" class="action-btn download" onclick="downloadExerciseTxt()" style="background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);">
                 <span>📝</span>
-                <span>TXT файлға жүктеу</span>
+                <span>Download as TXT</span>
             </button>
             <button type="button" class="action-btn copy" onclick="copyToClipboard()">
                 <span>📋</span>
-                <span>Көшіру</span>
+                <span>Copy</span>
             </button>
         </div>
     </div>
@@ -467,20 +442,9 @@
         const format = document.getElementById('selectedFormat').value;
         const level = document.getElementById('selectedLevel').value;
 
-        if (!topic) {
-            showError('❌ Тақырып енгізіңіз!');
-            return;
-        }
-
-        if (!format) {
-            showError('❌ Формат таңдаңыз!');
-            return;
-        }
-
-        if (!level) {
-            showError('❌ Сынып деңгейін таңдаңыз!');
-            return;
-        }
+        if (!topic) { showError('❌ Please enter a topic!'); return; }
+        if (!format) { showError('❌ Please select a format!'); return; }
+        if (!level) { showError('❌ Please select a grade level!'); return; }
 
         document.getElementById('resultCard').classList.remove('show');
         document.getElementById('errorMessage').classList.remove('show');
@@ -496,44 +460,35 @@
                     'Content-Type': 'application/json',
                     'X-CSRFToken': csrftoken
                 },
-                body: JSON.stringify({
-                    topic: topic,
-                    format: format,
-                    level: level
-                })
+                body: JSON.stringify({ topic, format, level })
             });
 
             const data = await response.json();
 
             if (data.success) {
-                // Егер Ойын болса, жаңа бетке redirect
                 if (data.redirect) {
                     window.location.href = data.redirect;
                     return;
                 }
 
-                // Басқа форматтар үшін
                 currentExerciseContent = data.exercise_content;
                 document.getElementById('exerciseContent').textContent = data.exercise_content;
-                document.getElementById('taskDate').textContent = new Date().toLocaleDateString('kk-KZ');
+                document.getElementById('taskDate').textContent = new Date().toLocaleDateString('en-US');
                 document.getElementById('taskLevel').textContent = level;
                 document.getElementById('taskFormat').textContent = format;
 
                 setTimeout(() => {
                     document.getElementById('loadingSpinner').classList.remove('show');
                     document.getElementById('resultCard').classList.add('show');
-                    document.getElementById('resultCard').scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }, 1000);
             } else {
                 document.getElementById('loadingSpinner').classList.remove('show');
-                showError('❌ ' + (data.error || 'Қате орын алды!'));
+                showError('❌ ' + (data.error || 'An error occurred!'));
             }
         } catch (error) {
             document.getElementById('loadingSpinner').classList.remove('show');
-            showError('❌ Сервермен байланыс қатесі: ' + error.message);
+            showError('❌ Server connection error: ' + error.message);
         } finally {
             document.getElementById('generateBtn').disabled = false;
         }
@@ -544,27 +499,18 @@
         errorDiv.textContent = message;
         errorDiv.classList.remove('success');
         errorDiv.classList.add('show');
-        setTimeout(() => {
-            errorDiv.classList.remove('show');
-        }, 5000);
+        setTimeout(() => errorDiv.classList.remove('show'), 5000);
     }
 
     function showSuccess(message) {
         const errorDiv = document.getElementById('errorMessage');
         errorDiv.textContent = message;
-        errorDiv.classList.add('success');
-        errorDiv.classList.add('show');
-        setTimeout(() => {
-            errorDiv.classList.remove('show');
-            errorDiv.classList.remove('success');
-        }, 3000);
+        errorDiv.classList.add('success', 'show');
+        setTimeout(() => { errorDiv.classList.remove('show', 'success'); }, 3000);
     }
 
     function downloadExerciseWord() {
-        if (!currentExerciseContent) {
-            showError('❌ Тапсырма жоқ!');
-            return;
-        }
+        if (!currentExerciseContent) { showError('❌ No exercise content!'); return; }
 
         const topic = document.getElementById('topicInput').value;
         const level = document.getElementById('taskLevel').textContent;
@@ -573,69 +519,49 @@
 
         fetch('/api/download-exercise-word/', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken
-            },
-            body: JSON.stringify({
-                content: currentExerciseContent,
-                topic: topic,
-                level: level,
-                format: format
-            })
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
+            body: JSON.stringify({ content: currentExerciseContent, topic, level, format })
         })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Жүктеу қатесі');
-            }
+            if (!response.ok) throw new Error('Download error');
             return response.blob();
         })
         .then(blob => {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${topic}_тапсырма.docx`;
+            a.download = `${topic}_exercise.docx`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
-            showSuccess('✅ Word файл жүктелді!');
+            showSuccess('✅ Word file downloaded!');
         })
-        .catch(err => {
-            showError('❌ Жүктеу қатесі: ' + err.message);
-        });
+        .catch(err => showError('❌ Download error: ' + err.message));
     }
 
     function downloadExerciseTxt() {
-        if (!currentExerciseContent) {
-            showError('❌ Тапсырма жоқ!');
-            return;
-        }
+        if (!currentExerciseContent) { showError('❌ No exercise content!'); return; }
 
         const topic = document.getElementById('topicInput').value;
         const blob = new Blob([currentExerciseContent], { type: 'text/plain;charset=utf-8' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${topic}_тапсырма.txt`;
+        a.download = `${topic}_exercise.txt`;
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
-        showSuccess('✅ TXT файл жүктелді!');
+        showSuccess('✅ TXT file downloaded!');
     }
 
     function copyToClipboard() {
-        if (!currentExerciseContent) {
-            showError('❌ Тапсырма жоқ!');
-            return;
-        }
+        if (!currentExerciseContent) { showError('❌ No exercise content!'); return; }
 
-        navigator.clipboard.writeText(currentExerciseContent).then(() => {
-            showSuccess('✅ Тапсырма көшірілді!');
-        }).catch(err => {
-            showError('❌ Көшіру қатесі: ' + err.message);
-        });
+        navigator.clipboard.writeText(currentExerciseContent)
+            .then(() => showSuccess('✅ Exercise copied!'))
+            .catch(err => showError('❌ Copy error: ' + err.message));
     }
 </script>
 {% endblock %}

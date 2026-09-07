@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="kk">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,206 +8,175 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-          body {
-        font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f9f9f9;
-    margin: 0;
-    padding: 0;
-        background-image: url('static/images/photo7.jpg');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      background-image: url('static/images/photo7.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
     .navbar {
-        display: flex;
-        align-items: center; /* Элементтерді тігінен туралау */
-        justify-content: space-between; /* Логотип сол жақта, сілтемелер оң жақта */
-        padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
     }
 
     .nav-links {
-        display: flex;
-        gap: 15px; /* Басты бет пен Бастау арасындағы арақашықтық */
+      display: flex;
+      gap: 15px;
     }
 
     .nav-links a {
-        text-decoration: none;
-        color: #333;
-        font-size: 12px;
-        padding: 10px 15px;
+      text-decoration: none;
+      color: #333;
+      font-size: 12px;
+      padding: 10px 15px;
     }
-
 
     .logo {
-        font-size: 14px;
-        font-weight: bold;
-        color: blue;
+      font-size: 14px;
+      font-weight: bold;
+      color: blue;
     }
 
-    .highlight {
-        color: blue;
-    }
-
-    .ai {
-        color: #ffcc00; /* Сары түс */
-    }
-
-
+    .highlight { color: blue; }
+    .ai { color: #ffcc00; }
 
     h2 {
-    font-size: 50px; /* Үлкен шрифт */
-    font-weight: bold; /* Қалың (жирный) жазу */
-    color: blue;
-    text-align: center; /* Ортаға туралау */
+      font-size: 50px;
+      font-weight: bold;
+      color: blue;
+      text-align: center;
     }
 
-    h2 span {
-        color: #ffcc00; /* "AI" бөлігін сары түске бояу */
-    }
+    h2 span { color: #ffcc00; }
 
     p {
-        font-size: 16px; /* Сипаттаманың өлшемі */
-        color: black;
-        text-align: center; /* Ортаға туралау */
-        max-width: 600px; /* Тым ұзын болмауы үшін */
-        margin: 10px auto; /* Ортаға қою */
+      font-size: 16px;
+      color: black;
+      text-align: center;
+      max-width: 600px;
+      margin: 10px auto;
     }
-  .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-         .button-card h3 {
-        color: #1a237e; /* Көк түстің қою реңкі */
-        font-size: 18px;
-        font-weight: bold;
-        text-transform: uppercase;
-        text-align: center;
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .button-card h3 {
+      color: #1a237e;
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-align: center;
     }
 
     .button-card p {
-        color: #333; /* Қараға жақын, бірақ тым қатты емес */
-        font-size: 14px;
-        font-weight: 500;
-        text-align: center;
+      color: #333;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
     }
 
     .button-card {
-        background: white;
-        padding: 8px;
-        border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        width: 260px;
-        cursor: pointer;
-        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      background: white;
+      padding: 8px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      width: 260px;
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     }
 
     .button-card:hover {
-        transform: scale(1.08);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+      transform: scale(1.08);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
     }
 
+    .container {
+      width: 80%;
+      margin: 30px auto;
+    }
 
+    h3 {
+      font-size: 24px;
+      color: #1a1a1a;
+      margin-bottom: 20px;
+    }
 
-.container {
-    width: 80%;
-    margin: 30px auto;
-}
+    .ai-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      justify-content: center;
+    }
 
-h3 {
-    font-size: 24px;
-    color: #1a1a1a;
-    margin-bottom: 20px;
-}
+    .ai-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
 
-.ai-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    justify-content: center;
-}
+    .ai-card img {
+      width: 100%;
+      border-radius: 10px;
+    }
 
-.ai-card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
+    .ai-card h4 {
+      font-size: 18px;
+      color: #002984;
+      margin: 10px 0;
+    }
 
-.ai-card img {
-    width: 100%;
-    border-radius: 10px;
-}
-
-.ai-card h4 {
-    font-size: 18px;
-    color: #002984;
-    margin: 10px 0;
-}
-
-.ai-card p {
-    font-size: 14px;
-    color: #444;
-    padding: 0 10px;
-}
-
-      /* Төменгі бөлім (Footer) */
-      footer {
-        background-color: #333;
-        color: #fff;
-        padding: 20px 0;
-        margin-top: 40px;
-        text-align: center;
-      }
+    .ai-card p {
+      font-size: 14px;
+      color: #444;
+      padding: 0 10px;
+    }
 
     footer {
-        background-color: white;;
-        padding: 20px 0;
-        font-family: Arial, sans-serif;
+      background-color: white;
+      padding: 20px 0;
+      font-family: Arial, sans-serif;
     }
 
     .footer-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
     }
 
-    .links {
-        display: flex;
-        gap: 40px;
-    }
+    .links { display: flex; gap: 40px; }
 
-    .column h4 {
-        font-size: 16px;
-        margin-bottom: 10px;
-    }
+    .column h4 { font-size: 16px; margin-bottom: 10px; }
 
-    .column ul {
-        list-style: none;
-        padding: 0;
-    }
+    .column ul { list-style: none; padding: 0; }
 
-    .column ul li {
-        margin-bottom: 5px;
-    }
+    .column ul li { margin-bottom: 5px; }
 
-    .column ul li a {
-        text-decoration: none;
-        color: #333;
-    }
+    .column ul li a { text-decoration: none; color: #333; }
 
     .footer-bottom {
-        text-align: center;
-        margin-top: 20px;
-        font-size: 10px;
-        color: white;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 10px;
+      color: white;
     }
- /* Чатбот батырмасы */
+
+    /* Chatbot button */
     .chat-button {
       position: fixed;
       bottom: 20px;
@@ -238,7 +207,7 @@ h3 {
       object-fit: cover;
     }
 
-    /* Чат терезесі */
+    /* Chat window */
     .chat-window {
       position: fixed;
       bottom: 90px;
@@ -255,22 +224,13 @@ h3 {
       animation: slideUp 0.3s ease;
     }
 
-    .chat-window.active {
-      display: flex;
-    }
+    .chat-window.active { display: flex; }
 
     @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Чат тақырыбы */
     .chat-header {
       background: linear-gradient(135deg, #0056d2, #0041a8);
       color: white;
@@ -297,10 +257,7 @@ h3 {
       font-size: 24px;
     }
 
-    .bot-info h3 {
-      font-size: 16px;
-      margin-bottom: 3px;
-    }
+    .bot-info h3 { font-size: 16px; margin-bottom: 3px; }
 
     .bot-status {
       font-size: 12px;
@@ -335,11 +292,8 @@ h3 {
       transition: background 0.3s;
     }
 
-    .close-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
+    .close-btn:hover { background: rgba(255, 255, 255, 0.3); }
 
-    /* Хабарламалар аймағы */
     .chat-messages {
       flex: 1;
       padding: 20px;
@@ -347,9 +301,7 @@ h3 {
       background: #f8f9fa;
     }
 
-    .chat-messages::-webkit-scrollbar {
-      width: 6px;
-    }
+    .chat-messages::-webkit-scrollbar { width: 6px; }
 
     .chat-messages::-webkit-scrollbar-thumb {
       background: #cbd5e0;
@@ -367,23 +319,17 @@ h3 {
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .message.bot {
-      justify-content: flex-start;
-    }
+    .message.bot { justify-content: flex-start; }
+    .message.user { justify-content: flex-end; }
 
-    .message.user {
-      justify-content: flex-end;
-    }
-
-    /* ӨЗГЕРТІЛГЕН БӨЛІК - толық ен үшін */
     .message-content {
-      max-width: 100%; /* 75% орнына 100% */
-      width: 100%; /* Толық ен */
+      max-width: 100%;
+      width: 100%;
       padding: 12px 16px;
       border-radius: 18px;
       line-height: 1.5;
       font-size: 14px;
-      text-align: justify; /* Мәтінді екі жақтан туралау */
+      text-align: justify;
     }
 
     .message.bot .message-content {
@@ -399,7 +345,6 @@ h3 {
       border-bottom-right-radius: 4px;
     }
 
-    /* Жазу индикаторы */
     .typing-indicator {
       display: none;
       padding: 12px 16px;
@@ -411,9 +356,7 @@ h3 {
       margin: 0 20px 15px 20px;
     }
 
-    .typing-indicator.active {
-      display: block;
-    }
+    .typing-indicator.active { display: block; }
 
     .typing-dot {
       display: inline-block;
@@ -425,20 +368,14 @@ h3 {
       animation: typing 1.4s infinite;
     }
 
-    .typing-dot:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .typing-dot:nth-child(3) {
-      animation-delay: 0.4s;
-    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
 
     @keyframes typing {
       0%, 60%, 100% { transform: translateY(0); }
       30% { transform: translateY(-10px); }
     }
 
-    /* Жылдам жауаптар */
     .quick-replies {
       padding: 10px 20px;
       background: white;
@@ -448,9 +385,7 @@ h3 {
       overflow-x: auto;
     }
 
-    .quick-replies::-webkit-scrollbar {
-      height: 4px;
-    }
+    .quick-replies::-webkit-scrollbar { height: 4px; }
 
     .quick-reply-btn {
       padding: 8px 16px;
@@ -468,7 +403,6 @@ h3 {
       border-color: #cbd5e0;
     }
 
-    /* Енгізу аймағы */
     .chat-input {
       padding: 15px 20px;
       background: white;
@@ -487,9 +421,7 @@ h3 {
       transition: border 0.3s;
     }
 
-    .chat-input input:focus {
-      border-color: #0056d2;
-    }
+    .chat-input input:focus { border-color: #0056d2; }
 
     .send-btn {
       width: 45px;
@@ -503,9 +435,7 @@ h3 {
       transition: transform 0.3s;
     }
 
-    .send-btn:hover {
-      transform: scale(1.1);
-    }
+    .send-btn:hover { transform: scale(1.1); }
 
     .send-btn:disabled {
       opacity: 0.5;
@@ -522,260 +452,232 @@ h3 {
   </style>
 </head>
 <body>
-   <div class="navbar">
-    <span  class="logo">Bilim<span class="highlight">ALL</span> <span class="ai">AI</span></span>
+  <div class="navbar">
+    <span class="logo">Bilim<span class="highlight">ALL</span> <span class="ai">AI</span></span>
     <div class="nav-links">
-        <a href="/">Басты бет</a>
-        <a href="{% url 'chat' %}" >Бастау</a>
+      <a href="/">Home</a>
+      <a href="{% url 'chat' %}">Get Started</a>
     </div>
-</div>
+  </div>
 
   <main>
     {% block content %}{% endblock %}
   </main>
 
-   <!-- Чат-бот батырмасы (Telegram сілтемесімен) -->
-<button class="chat-button" id="chatButton">
-  <img src="https://img.freepik.com/free-vector/chatbot-chat-message-vectorart_78370-4104.jpg" alt="Chat">
-</button>
-   <div class="chat-window" id="chatWindow">
-  <!-- Тақырып -->
-  <div class="chat-header">
-    <div class="chat-header-content">
-      <div class="bot-avatar">🤖</div>
-      <div class="bot-info">
-        <h3>BilimALL AI</h3>
-        <div class="bot-status">
-          <span class="status-dot"></span>
-          <span>Онлайн</span>
+  <!-- Chatbot button -->
+  <button class="chat-button" id="chatButton">
+    <img src="https://img.freepik.com/free-vector/chatbot-chat-message-vectorart_78370-4104.jpg" alt="Chat">
+  </button>
+
+  <div class="chat-window" id="chatWindow">
+    <!-- Header -->
+    <div class="chat-header">
+      <div class="chat-header-content">
+        <div class="bot-avatar">🤖</div>
+        <div class="bot-info">
+          <h3>BilimALL AI</h3>
+          <div class="bot-status">
+            <span class="status-dot"></span>
+            <span>Online</span>
+          </div>
+        </div>
+      </div>
+      <button class="close-btn" id="closeBtn">×</button>
+    </div>
+
+    <!-- Messages -->
+    <div class="chat-messages" id="chatMessages">
+      <div class="message bot">
+        <div class="message-content">
+          👋 Hello! I am the BilimALL AI assistant. How can I help you?
         </div>
       </div>
     </div>
-    <button class="close-btn" id="closeBtn">×</button>
-  </div>
 
-  <!-- Хабарламалар -->
-  <div class="chat-messages" id="chatMessages">
-    <div class="message bot">
-      <div class="message-content">
-        👋 Сәлеметсіз бе! Мен BilimALL AI ассистентімін. Сізге қалай көмектесе аламын?
-      </div>
+    <!-- Typing indicator -->
+    <div class="typing-indicator" id="typingIndicator">
+      <span class="typing-dot"></span>
+      <span class="typing-dot"></span>
+      <span class="typing-dot"></span>
+    </div>
+
+    <!-- Quick replies -->
+    <div class="quick-replies">
+      <button class="quick-reply-btn" data-message="Tell me about services">📋 Services</button>
+      <button class="quick-reply-btn" data-message="How to use?">❓ How to use</button>
+      <button class="quick-reply-btn" data-message="What subjects are available?">📚 Subjects</button>
+    </div>
+
+    <!-- Input area -->
+    <div class="chat-input">
+      <input type="text" id="userInput" placeholder="Type your question...">
+      <button class="send-btn" id="sendBtn">➤</button>
     </div>
   </div>
 
-  <!-- Жазу индикаторы -->
-  <div class="typing-indicator" id="typingIndicator">
-    <span class="typing-dot"></span>
-    <span class="typing-dot"></span>
-    <span class="typing-dot"></span>
-  </div>
+  <script>
+    const chatButton = document.getElementById('chatButton');
+    const chatWindow = document.getElementById('chatWindow');
+    const closeBtn = document.getElementById('closeBtn');
+    const chatMessages = document.getElementById('chatMessages');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const quickReplyBtns = document.querySelectorAll('.quick-reply-btn');
 
-  <!-- Жылдам жауаптар -->
-  <div class="quick-replies">
-    <button class="quick-reply-btn" data-message="Қызметтер туралы">📋 Қызметтер</button>
-    <button class="quick-reply-btn" data-message="Қалай пайдалану керек?">❓ Пайдалану</button>
-    <button class="quick-reply-btn" data-message="Қандай пәндер бар?">📚 Пәндер</button>
-  </div>
-
-  <!-- Енгізу аймағы -->
-  <div class="chat-input">
-    <input type="text" id="userInput" placeholder="Сұрағыңызды жазыңыз...">
-    <button class="send-btn" id="sendBtn">➤</button>
-  </div>
-</div>
-
-<script>
-  const chatButton = document.getElementById('chatButton');
-  const chatWindow = document.getElementById('chatWindow');
-  const closeBtn = document.getElementById('closeBtn');
-  const chatMessages = document.getElementById('chatMessages');
-  const userInput = document.getElementById('userInput');
-  const sendBtn = document.getElementById('sendBtn');
-  const typingIndicator = document.getElementById('typingIndicator');
-  const quickReplyBtns = document.querySelectorAll('.quick-reply-btn');
-
-  // CSRF token алу
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
         }
       }
+      return cookieValue;
     }
-    return cookieValue;
-  }
 
-  const csrftoken = getCookie('csrftoken');
+    const csrftoken = getCookie('csrftoken');
 
-  // Чатты ашу/жабу
-  chatButton.addEventListener('click', () => {
-    chatWindow.classList.toggle('active');
-  });
-
-  closeBtn.addEventListener('click', () => {
-    chatWindow.classList.remove('active');
-  });
-
-  // Хабарлама қосу
-  function addMessage(text, isBot = false) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${isBot ? 'bot' : 'user'}`;
-
-    // Markdown форматын HTML-ге айналдыру
-    let formattedText = text
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\n/g, '<br>');
-
-    messageDiv.innerHTML = `<div class="message-content">${formattedText}</div>`;
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-  }
-
-  // Backend-қа сұраныс жіберу
-  async function getAIResponse(message) {
-    try {
-      const response = await fetch('/chatbot-assistant/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrftoken
-        },
-        body: JSON.stringify({ message: message })
-      });
-
-      if (!response.ok) {
-        throw new Error('Сервер қатесі');
-      }
-
-      const data = await response.json();
-      return data.response;
-    } catch (error) {
-      console.error('Қате:', error);
-      return '⚠️ Кешіріңіз, қате орын алды. Қайталап көріңіз.';
-    }
-  }
-
-  // Жіберу функциясы
-  async function sendMessage() {
-    const message = userInput.value.trim();
-    if (!message) return;
-
-    // Пайдаланушы хабарламасы
-    addMessage(message, false);
-    userInput.value = '';
-    sendBtn.disabled = true;
-
-    // Жазу индикаторын көрсету
-    typingIndicator.classList.add('active');
-
-    // Backend-тан жауап алу
-    const response = await getAIResponse(message);
-
-    typingIndicator.classList.remove('active');
-    addMessage(response, true);
-    sendBtn.disabled = false;
-    userInput.focus();
-  }
-
-  // Event listeners
-  sendBtn.addEventListener('click', sendMessage);
-  userInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage();
-  });
-
-  // Жылдам жауаптар
-  quickReplyBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      userInput.value = btn.dataset.message;
-      sendMessage();
+    chatButton.addEventListener('click', () => {
+      chatWindow.classList.toggle('active');
     });
-  });
-</script>
-<footer style="background-color: #f9f9f9; padding: 50px 0; font-family: Arial, sans-serif; font-size: 14px; color: #333;">
-  <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;">
 
-    <!-- Logo + Social -->
-    <div style="flex: 1 1 250px; margin-bottom: 30px;">
-  <h2 style="font-size: 28px; margin-bottom: 10px;">
-    <span style="color: blue;">BilimALL</span><span style="color: gold;">AI</span>
-  </h2>
+    closeBtn.addEventListener('click', () => {
+      chatWindow.classList.remove('active');
+    });
 
-  <!-- Contact Section -->
-  <div style="margin-top: 30px;">
+    function addMessage(text, isBot = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${isBot ? 'bot' : 'user'}`;
 
-    <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+      let formattedText = text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
 
-      <!-- First Row -->
-      <div style="display: flex; width: 100%; gap: 12px;">
-        <a href="#" style="display: flex; align-items: center; color: #333; text-decoration: none;">
-          <img src="https://cdn-icons-png.flaticon.com/24/2111/2111463.png" alt="Instagram" style="margin-right: 5px;"> Instagram
-        </a>
-        <a href="#" style="display: flex; align-items: center; color: #333; text-decoration: none;">
-          <img src="https://cdn-icons-png.flaticon.com/24/733/733547.png" alt="Facebook" style="margin-right: 5px;"> Facebook
-        </a>
-        <a href="#" style="display: flex; align-items: center; color: #333; text-decoration: none;">
-          <img src="https://cdn-icons-png.flaticon.com/24/2111/2111646.png" alt="Telegram" style="margin-right: 5px;"> Telegram
-        </a>
+      messageDiv.innerHTML = `<div class="message-content">${formattedText}</div>`;
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function getAIResponse(message) {
+      try {
+        const response = await fetch('/chatbot-assistant/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+          },
+          body: JSON.stringify({ message: message })
+        });
+
+        if (!response.ok) throw new Error('Server error');
+
+        const data = await response.json();
+        return data.response;
+      } catch (error) {
+        console.error('Error:', error);
+        return '⚠️ Sorry, an error occurred. Please try again.';
+      }
+    }
+
+    async function sendMessage() {
+      const message = userInput.value.trim();
+      if (!message) return;
+
+      addMessage(message, false);
+      userInput.value = '';
+      sendBtn.disabled = true;
+
+      typingIndicator.classList.add('active');
+
+      const response = await getAIResponse(message);
+
+      typingIndicator.classList.remove('active');
+      addMessage(response, true);
+      sendBtn.disabled = false;
+      userInput.focus();
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    quickReplyBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        userInput.value = btn.dataset.message;
+        sendMessage();
+      });
+    });
+  </script>
+
+  <footer style="background-color: #f9f9f9; padding: 50px 0; font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;">
+
+      <div style="flex: 1 1 250px; margin-bottom: 30px;">
+        <h2 style="font-size: 28px; margin-bottom: 10px;">
+          <span style="color: blue;">BilimALL</span><span style="color: gold;">AI</span>
+        </h2>
+
+        <div style="margin-top: 30px;">
+          <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+            <div style="display: flex; width: 100%; gap: 12px;">
+              <a href="#" style="display: flex; align-items: center; color: #333; text-decoration: none;">
+                <img src="https://cdn-icons-png.flaticon.com/24/2111/2111463.png" alt="Instagram" style="margin-right: 5px;"> Instagram
+              </a>
+              <a href="#" style="display: flex; align-items: center; color: #333; text-decoration: none;">
+                <img src="https://cdn-icons-png.flaticon.com/24/733/733547.png" alt="Facebook" style="margin-right: 5px;"> Facebook
+              </a>
+              <a href="#" style="display: flex; align-items: center; color: #333; text-decoration: none;">
+                <img src="https://cdn-icons-png.flaticon.com/24/2111/2111646.png" alt="Telegram" style="margin-right: 5px;"> Telegram
+              </a>
+            </div>
+            <div style="display: flex; width: 100%; gap: 12px; margin-top: 10px;">
+              <a href="#" style="display: flex; align-items: center; color: #333; text-decoration: none;">
+                <img src="https://cdn-icons-png.flaticon.com/24/733/733585.png" alt="WhatsApp" style="margin-right: 5px;"> WhatsApp
+              </a>
+              <a href="#" style="display: flex; align-items: center; color: #333; text-decoration: none;">
+                <img src="https://cdn-icons-png.flaticon.com/24/5968/5968534.png" alt="Mail.ru" style="margin-right: 5px;"> Mail.ru
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Second Row -->
-      <div style="display: flex; width: 100%; gap: 12px; margin-top: 10px;">
-        <a href="#" style="display: flex; align-items: center; color: #333; text-decoration: none;">
-          <img src="https://cdn-icons-png.flaticon.com/24/733/733585.png" alt="WhatsApp" style="margin-right: 5px;"> WhatsApp
-        </a>
-        <a href="#" style="display: flex; align-items: center; color: #333; text-decoration: none;">
-          <img src="https://cdn-icons-png.flaticon.com/24/5968/5968534.png" alt="Mail.ru" style="margin-right: 5px;"> Mail.ru
-        </a>
-      </div>
+      <div style="flex: 2 1 700px; display: flex; justify-content: space-around; flex-wrap: wrap; margin-bottom: 30px;">
+        <div>
+          <h4 style="margin-bottom: 10px; font-weight: bold;">Company</h4>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 8px;"><a href="#" style="color: #333; text-decoration: none;">Awards</a></li>
+            <li><a href="#" style="color: #333; text-decoration: none;">Research</a></li>
+          </ul>
+        </div>
 
+        <div>
+          <h4 style="margin-bottom: 10px; font-weight: bold;">University</h4>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 8px;"><a href="#" style="color: #333; text-decoration: none;">Zhubanov University</a></li>
+            <li><a href="#" style="color: #333; text-decoration: none;">Faculty of Physics and Mathematics</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="margin-bottom: 10px; font-weight: bold;">Services</h4>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 8px;"><a href="{% url 'chat' %}" style="color: #333; text-decoration: none;">BilimALL AI Chat</a></li>
+            <li><a href="{% url 'slide' %}" style="color: #333; text-decoration: none;">BilimALL AI Slide Generator</a></li>
+          </ul>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-    <!-- Links -->
-    <div style="flex: 2 1 700px; display: flex; justify-content: space-around; flex-wrap: wrap; margin-bottom: 30px;">
-
-      <div>
-        <h4 style="margin-bottom: 10px; font-weight: bold;">Компания</h4>
-        <ul style="list-style: none; padding: 0;">
-          <li style="margin-bottom: 8px;"><a href="#" style="color: #333; text-decoration: none;">Марапаттар</a></li>
-          <li><a href="#" style="color: #333; text-decoration: none;">Зерттеулер</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h4 style="margin-bottom: 10px; font-weight: bold;">Университет</h4>
-        <ul style="list-style: none; padding: 0;">
-          <li style="margin-bottom: 8px;"><a href="#" style="color: #333; text-decoration: none;">Zhubanov University</a></li>
-          <li><a href="#" style="color: #333; text-decoration: none;">Faculty of Physics and Mathematics</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h4 style="margin-bottom: 10px; font-weight: bold;">Қызметтер</h4>
-        <ul style="list-style: none; padding: 0;">
-          <li style="margin-bottom: 8px;"><a href="{% url 'chat' %}" style="color: #333; text-decoration: none;">BilimALL AI Chat</a></li>
-          <li><a href="{% url 'slide' %}" style="color: #333; text-decoration: none;">BilimALL AI Slide Generator</a></li>
-        </ul>
-      </div>
-
+    <div style="text-align: center; margin-top: 20px; font-size: 14px; color: #777;">
+      © 2025 BilimALL AI. Kazakhstan, Aktobe, Aktobe Regional University named after K. Zhubanov
     </div>
-
-  </div>
-
-  <!-- Copyright -->
-  <div style="text-align: center; margin-top: 20px; font-size: 14px; color: #777;">
-    © 2025 BilimALL AI. Қазақстан, Ақтөбе қаласы, Қ.Жұбанов атындағы Ақтөбе өңірлік университеті
-  </div>
-</footer>
-
-
-
-
+  </footer>
 </body>
 </html>

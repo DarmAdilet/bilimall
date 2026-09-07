@@ -16,27 +16,24 @@ from google import genai
 from google.genai import types
 from dotenv import load_dotenv
 
-# PowerPoint үшін
 from pptx import Presentation
 from pptx.util import Pt as PptxPt
 from pptx.dml.color import RGBColor as PptxRGBColor
 
-# Word үшін
 from docx import Document
 from docx.shared import Pt as DocxPt, RGBColor as DocxRGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
-# ============ КОНФИГУРАЦИЯ ============
+# ============ CONFIGURATION ============
 load_dotenv()
 API_KEY = os.getenv("GEMINI_API_KEY")
 
 if not API_KEY:
-    raise ValueError("⚠️ GEMINI_API_KEY .env ішінде табылмады!")
+    raise ValueError("⚠️ GEMINI_API_KEY not found in .env!")
 
 client = genai.Client(api_key=API_KEY)
 MODEL_NAME = "gemini-2.5-flash"
 
-# Қауіпсіздік параметрлері
 SAFETY_SETTINGS = [
     types.SafetySetting(category="HARM_CATEGORY_HARASSMENT", threshold="BLOCK_NONE"),
     types.SafetySetting(category="HARM_CATEGORY_HATE_SPEECH", threshold="BLOCK_NONE"),
@@ -45,7 +42,6 @@ SAFETY_SETTINGS = [
     types.SafetySetting(category="HARM_CATEGORY_CIVIC_INTEGRITY", threshold="BLOCK_NONE"),
 ]
 
-# Чат үшін арнайы system instruction
 CHAT_SYSTEM_INSTRUCTION = """Рөл: Сен мұғалімдерге Информатика пәнінің тақырыптарын басқа жаратылыстану пәндерімен байланыстыруға көмектесетін ассистентсің.
 
 Нұсқаулық:
@@ -63,9 +59,9 @@ CHAT_SYSTEM_INSTRUCTION = """Рөл: Сен мұғалімдерге Инфор�
 Тек нақты байланысы бар пәндерді ғана көрсет.
 Бір тақырыпты бірнеше рет әртүрлі құрылғылардан берген кезде жауаптар барлық жағдайда бірдей болуы керек, артық немесе әртүрлі жауаптар берме.
 Сұрақ тақырыптан ауытқыса немесе басқа салаға қатысты болса, жауап берме.
-Жауап бермес бұрын оқулықтарды толық зерттеп, тек содан кейін ғана жауап қайтар."""
+Жауап бермес бұрын оқулықтарды толық зерттеп, тек содан кейін ғана жауап қайтар.
+Always respond in English only. All output must be in English."""
 
-# Негізгі генерация конфигурациясы (чат үшін)
 GENERATION_CONFIG = types.GenerateContentConfig(
     temperature=0.3,
     top_p=0.95,
@@ -79,9 +75,9 @@ GENERATION_CONFIG = types.GenerateContentConfig(
 )
 
 
-# ============ HELPER ФУНКЦИЯЛАР ============
+# ============ HELPER FUNCTIONS ============
 def get_generation_config(system_instruction=None):
-    """Генерация конфигурациясын құру"""
+    """Build generation config"""
     config = types.GenerateContentConfig(
         temperature=0.3,
         top_p=0.95,
@@ -96,8 +92,7 @@ def get_generation_config(system_instruction=None):
 
 
 def stream_gemini_response(user_message, system_instruction=None, use_chat_config=False):
-    """Gemini API-дан жауап алу"""
-    # Егер чат конфигурациясын қолдану керек болса
+    """Get response from Gemini API"""
     if use_chat_config:
         config = GENERATION_CONFIG
     elif system_instruction:
@@ -121,16 +116,16 @@ def stream_gemini_response(user_message, system_instruction=None, use_chat_confi
         ):
             response_text += chunk.text
     except Exception as e:
-        raise Exception(f"Gemini API қатесі: {str(e)}")
+        raise Exception(f"Gemini API error: {str(e)}")
 
     return response_text.strip()
 
 
 def validate_json_request(request):
-    """JSON сұранысын тексеру"""
+    """Validate JSON request"""
     if request.method != 'POST':
         return None, JsonResponse(
-            {'error': 'Тек POST сұраныстар қабылданады'},
+            {'error': 'Only POST requests are accepted'},
             status=405
         )
 
@@ -142,18 +137,18 @@ def validate_json_request(request):
         return data, None
     except json.JSONDecodeError:
         return None, JsonResponse(
-            {'error': 'Жарамсыз JSON форматы'},
+            {'error': 'Invalid JSON format'},
             status=400
         )
 
 
-# ============ ЧАТ ============
+# ============ CHAT ============
 @csrf_exempt
 def chat_with_gemini(request):
-    """Пайдаланушының хабарламасын өңдеп, Gemini-ден жауап қайтарады."""
+    """Process user message and return Gemini response."""
     if request.method != "POST":
         return JsonResponse(
-            {"error": "⚠️ Тек POST сұранысы қолдау табады!"},
+            {"error": "⚠️ Only POST requests are supported!"},
             status=400
         )
 
@@ -163,68 +158,62 @@ def chat_with_gemini(request):
 
         if not user_message:
             return JsonResponse(
-                {"response": "⚠️ Хабарлама бос болмауы керек!"},
+                {"response": "⚠️ Message cannot be empty!"},
                 status=400
             )
 
-        # Кэштен тексеру
         cache_key = f"chat_{hash(user_message)}"
         cached_response = cache.get(cache_key)
 
         if cached_response:
             return JsonResponse({"response": cached_response})
 
-        # Жауап генерациялау (чат конфигурациясын қолдану)
         response_text = stream_gemini_response(user_message, use_chat_config=True)
 
-        # Кэшке сақтау
         cache.set(cache_key, response_text, 3600)
 
         return JsonResponse({"response": response_text})
 
     except json.JSONDecodeError:
         return JsonResponse(
-            {"error": "⚠️ JSON форматы қате!"},
+            {"error": "⚠️ Invalid JSON format!"},
             status=400
         )
 
     except Exception as e:
         return JsonResponse(
-            {"error": f"⚠️ Серверлік қате: {str(e)}"},
+            {"error": f"⚠️ Server error: {str(e)}"},
             status=500
         )
 
 
-# ============ WORD ЖҮКТЕУ ============
+# ============ WORD DOWNLOAD ============
 @csrf_exempt
 def download_exercise_word(request):
-    """Тапсырманы Word файлына жүктеу"""
+    """Download exercise as Word file"""
     data, error_response = validate_json_request(request)
     if error_response:
         return error_response
 
     exercise_content = data.get('content', '').strip()
-    topic = data.get('topic', 'Тапсырма').strip()
+    topic = data.get('topic', 'Exercise').strip()
     level = data.get('level', '').strip()
     format_type = data.get('format', '').strip()
 
     if not exercise_content:
         return JsonResponse(
-            {'error': 'Тапсырма мазмұны жоқ'},
+            {'error': 'No exercise content'},
             status=400
         )
 
     try:
-        # Word документін құру
         doc = Document()
 
-        # Стильдер
         style = doc.styles['Normal']
         font = style.font
         font.name = 'Times New Roman'
         font.size = DocxPt(12)
 
-        # Тақырып
         title = doc.add_heading(topic, level=0)
         title.alignment = WD_ALIGN_PARAGRAPH.CENTER
         title_run = title.runs[0]
@@ -232,21 +221,18 @@ def download_exercise_word(request):
         title_run.font.bold = True
         title_run.font.color.rgb = DocxRGBColor(0, 84, 149)
 
-        # Метадеректер
         doc.add_paragraph()
         meta_para = doc.add_paragraph()
-        meta_para.add_run(f'📊 Сынып: ').bold = True
+        meta_para.add_run(f'📊 Grade: ').bold = True
         meta_para.add_run(level)
-        meta_para.add_run('\n📝 Формат: ').bold = True
+        meta_para.add_run('\n📝 Format: ').bold = True
         meta_para.add_run(format_type)
-        meta_para.add_run('\n📅 Күні: ').bold = True
+        meta_para.add_run('\n📅 Date: ').bold = True
         meta_para.add_run(datetime.now().strftime('%Y-%m-%d'))
 
-        # Сызық
         doc.add_paragraph('_' * 60)
         doc.add_paragraph()
 
-        # Мазмұн
         lines = exercise_content.split('\n')
         for line in lines:
             if line.strip():
@@ -261,73 +247,70 @@ def download_exercise_word(request):
                     para_format.line_spacing = 1.5
                     para_format.space_after = DocxPt(6)
 
-        # Footer
         doc.add_paragraph()
         footer_para = doc.add_paragraph()
         footer_run = footer_para.add_run('\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')
         footer_run.font.color.rgb = DocxRGBColor(128, 128, 128)
-        footer_para.add_run('Генерацияланған: BilimAll AI\n').italic = True
+        footer_para.add_run('Generated by: BilimAll AI\n').italic = True
         footer_para.add_run('https://bilimall.kz').font.color.rgb = DocxRGBColor(0, 84, 149)
         footer_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
-        # Файлды жадта сақтау
         doc_io = io.BytesIO()
         doc.save(doc_io)
         doc_io.seek(0)
 
-        # HTTP жауабы
         response = HttpResponse(
             doc_io.read(),
             content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
 
-        filename = f"{topic.replace(' ', '_')}_тапсырма.docx"
+        filename = f"{topic.replace(' ', '_')}_exercise.docx"
         response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
         return response
 
     except Exception as e:
-        print(f"Word қатесі: {str(e)}")
+        print(f"Word error: {str(e)}")
         return JsonResponse({
-            'error': f'Word файлын жасау кезінде қате: {str(e)}'
+            'error': f'Error creating Word file: {str(e)}'
         }, status=500)
 
 
-# ============ ОЙЫН ФУНКЦИЯЛАРЫ ============
+# ============ GAME FUNCTIONS ============
 def generate_game_questions(topic, level):
-    """Ойын сұрақтарын генерациялау"""
-    prompt = f"""Python бағдарламалау тілін үйренуге арналған интерактивті викторина сұрақтарын құрастыр.
+    """Generate game questions"""
+    prompt = f"""Create interactive quiz questions for learning Python programming.
 
-Параметрлер:
-- Тақырып: {topic}
-- Деңгей: {level}
+Parameters:
+- Topic: {topic}
+- Level: {level}
 
-Нұсқаулық:
-1. 10 сұрақ жаса
-2. Әр сұрақта 4 жауап нұсқасы болсын
-3. Сұрақтар Python синтаксисі, функциялар, циклдер, шарттар, деректер түрлері туралы болсын
-4. Кейбір сұрақтарда код мысалдары көрсет
-5. Дұрыс жауап нөмірін көрсет (0-3 аралығында)
-6. Әр жауапқа қысқа түсініктеме бер
+Instructions:
+1. Create 10 questions
+2. Each question should have 4 answer options
+3. Questions should cover Python syntax, functions, loops, conditions, data types
+4. Some questions may include code examples
+5. Indicate the correct answer index (0-3)
+6. Provide a short explanation for each answer
 
-МІНДЕТТІ: Жауабыңызды тек JSON форматында қайтар.
+REQUIRED: Return your answer in JSON format only.
 
-JSON форматы:
+JSON format:
 {{
   "questions": [
     {{
-      "question": "Сұрақ мәтіні",
+      "question": "Question text",
       "code": "print('Hello')",
-      "options": ["A нұсқа", "B нұсқа", "C нұсқа", "D нұсқа"],
+      "options": ["Option A", "Option B", "Option C", "Option D"],
       "correctIndex": 0,
-      "explanation": "Түсініктеме"
+      "explanation": "Explanation"
     }}
   ]
 }}
 
-Ескертпе: "code" өрісі опционалды."""
+Note: "code" field is optional."""
 
-    system_inst = "Сен Python үйретуші ботсың. Тек JSON форматында жауап қайтар!"
+    system_inst = "You are a Python teaching bot. Return answers in JSON format only!"
 
     response = stream_gemini_response(prompt, system_inst)
 
@@ -344,13 +327,13 @@ JSON форматы:
         data = json.loads(response)
         return data.get('questions', [])
     except json.JSONDecodeError as e:
-        print(f"JSON parse қатесі: {e}")
+        print(f"JSON parse error: {e}")
         return []
 
 
 @csrf_exempt
 def generate_game_questions_api(request):
-    """Ойын сұрақтарын генерациялау API"""
+    """Game questions generation API"""
     data, error_response = validate_json_request(request)
     if error_response:
         return error_response
@@ -360,7 +343,7 @@ def generate_game_questions_api(request):
 
     if not topic or not level:
         return JsonResponse(
-            {'error': 'Тақырып және деңгей көрсетілуі керек'},
+            {'error': 'Topic and level must be specified'},
             status=400
         )
 
@@ -378,7 +361,7 @@ def generate_game_questions_api(request):
 
         if not questions:
             return JsonResponse(
-                {'error': 'Сұрақтар генерацияланбады'},
+                {'error': 'Questions were not generated'},
                 status=500
             )
 
@@ -391,14 +374,14 @@ def generate_game_questions_api(request):
 
     except Exception as e:
         return JsonResponse({
-            'error': f'Қате орын алды: {str(e)}'
+            'error': f'An error occurred: {str(e)}'
         }, status=500)
 
 
 def game_view(request):
-    """Ойын бетін көрсету"""
-    topic = request.GET.get('topic', 'Python негіздері')
-    level = request.GET.get('level', '5-сынып')
+    """Show game page"""
+    topic = request.GET.get('topic', 'Python Basics')
+    level = request.GET.get('level', 'Grade 5')
 
     return render(request, 'steam/game.html', {
         'topic': topic,
@@ -406,33 +389,33 @@ def game_view(request):
     })
 
 
-# ============ ТАПСЫРМА ГЕНЕРАЦИЯЛАУ ============
+# ============ EXERCISE GENERATION ============
 def generate_exercise_content(topic, format_type, level):
-    """Тапсырма мазмұнын генерациялау"""
-    prompt = f"""Келесі параметрлерге сәйкес тапсырма құрастыр:
+    """Generate exercise content"""
+    prompt = f"""Create an exercise based on the following parameters:
 
-Тақырып: {topic}
-Формат: {format_type}
-Сынып деңгейі: {level}
+Topic: {topic}
+Format: {format_type}
+Grade level: {level}
 
-Нұсқаулық:
-1. Тапсырма қазақ тілінде болуы керек
-2. Сынып деңгейіне сәйкес қиындық болсын
-3. Таңдалған форматқа сәйкес жаса:
-   - Тест: 20 сұрақ, 4 нұсқалы жауап, дұрыс жауаптар көрсетілсін
-   - Тапсырма: 5-7 практикалық тапсырма, нұсқаулықтармен
-   - Сұрақтар: 8-10 ашық сұрақ, әртүрлі қиындық деңгейімен
+Instructions:
+1. The exercise must be in Kazakh language
+2. Difficulty should match the grade level
+3. Create according to the selected format:
+   - Test: 20 questions, 4 answer options, correct answers shown
+   - Exercise: 5-7 practical tasks with instructions
+   - Questions: 8-10 open-ended questions with varying difficulty
 
-4. Тапсырмалар нақты, түсінікті және білім бағалауға бағытталған болсын"""
+4. Tasks should be clear, specific, and aimed at knowledge assessment"""
 
-    system_inst = "Сен тәжірибелі мұғалімсің. Тек дайын тапсырманы қайтар."
+    system_inst = "You are an experienced teacher. Return only the finished exercise."
 
     return stream_gemini_response(prompt, system_inst)
 
 
 @csrf_exempt
 def generate_exercise(request):
-    """Тапсырма генерациялау API"""
+    """Exercise generation API"""
     data, error_response = validate_json_request(request)
     if error_response:
         return error_response
@@ -443,11 +426,11 @@ def generate_exercise(request):
 
     if not topic or not format_type or not level:
         return JsonResponse(
-            {'error': 'Барлық өрістер толтырылуы керек'},
+            {'error': 'All fields must be filled'},
             status=400
         )
 
-    if format_type == 'Ойын':
+    if format_type == 'Game':
         from urllib.parse import quote
         return JsonResponse({
             'success': True,
@@ -468,7 +451,7 @@ def generate_exercise(request):
 
         if not exercise_content:
             return JsonResponse(
-                {'error': 'Тапсырма генерацияланбады'},
+                {'error': 'Exercise was not generated'},
                 status=500
             )
 
@@ -481,13 +464,13 @@ def generate_exercise(request):
 
     except Exception as e:
         return JsonResponse({
-            'error': f'Қате орын алды: {str(e)}'
+            'error': f'An error occurred: {str(e)}'
         }, status=500)
 
 
-# ============ СЛАЙД ГЕНЕРАЦИЯЛАУ ============
+# ============ SLIDE GENERATION ============
 def create_slide_text_frame(shape, content, title_level=False):
-    """Слайд мәтінін пішімдеу"""
+    """Format slide text"""
     tf = shape.text_frame
     tf.clear()
 
@@ -513,36 +496,34 @@ def create_slide_text_frame(shape, content, title_level=False):
 
 
 def generate_slide_content(topic):
-    """Слайд мазмұнын генерациялау"""
-    prompt = f"""Келесі жолда информатика және жаратылыстану пәндеріне қатысты ақпарат берілген:
+    """Generate slide content"""
+    prompt = f"""The following line contains information about Computer Science and natural science subjects:
 
 {topic}
 
-Бұл жолда: информатика тақырыбы, жаратылыстану пәнінің атауы, сынып, жаратылыстану пәніндегі тақырып үтір арқылы берілген.
+This line contains: a Computer Science topic, a natural science subject name, grade, and a natural science topic — separated by commas.
 
-Сенің тапсырмаң:
-1. Берілген мәліметтегі информатика және жаратылыстану пәндері арасындағы байланысты түсіндір.
-2. Осы байланыс негізінде қазақ тілінде 5–7 слайдтан тұратын презентация мәтінін құрастыр.
-3. Әр слайд нақты мазмұнды болсын (мысалы: кіріспе, негізгі ұғымдар, пәндік байланыс, мысал, қорытынды).
-4. Ақпаратты тек okulyk.kz сайтындағы ресми оқулықтарға сүйеніп жаса.
-5. Әр слайдты '**N-слайд**' деген белгімен бөліп жаз.
-6. Әр слайдтың сөйлемдері көлемді, әрі түсінікті, нақты болсын
-7. Пайдаланылған әдебиеттер тізімін,сыныбын,баспасын, авторларын жаз"""
+Your task:
+1. Explain the connection between Computer Science and the natural science subject in the given data.
+2. Based on this connection, create a presentation text in Kazakh consisting of 5–7 slides.
+3. Each slide should have specific content (e.g.: introduction, key concepts, subject connection, example, conclusion).
+4. Use only official textbooks from okulyk.kz.
+5. Separate each slide with the label '**N-slide**'.
+6. Sentences in each slide should be detailed, clear, and specific.
+7. Include a list of references, grade, publisher, and authors."""
 
-    system_inst = "Тек дайын презентация мәтінін қайтар."
+    system_inst = "Return only the finished presentation text."
     return stream_gemini_response(prompt, system_inst)
 
 
 def create_kazakh_slides(prs, topic, content):
-    """Қазақ тіліндегі слайдтарды құру"""
-    slides_content = re.split(r'\*\*(\d+-слайд.*?)\*\*', content)
+    """Create slides"""
+    slides_content = re.split(r'\*\*(\d+-slide.*?)\*\*', content)
 
-    # Бірінші слайд (тақырып)
     title_slide = prs.slides.add_slide(prs.slide_layouts[0])
     title_slide.shapes.title.text = topic
-    title_slide.placeholders[1].text = "Автоматты түрде жасалған презентация"
+    title_slide.placeholders[1].text = "Automatically generated presentation"
 
-    # Қалған слайдтар
     for i in range(1, len(slides_content), 2):
         if i + 1 >= len(slides_content):
             continue
@@ -560,7 +541,7 @@ def create_kazakh_slides(prs, topic, content):
 
 @csrf_exempt
 def generate_slide(request):
-    """Слайд генерациялау API"""
+    """Slide generation API"""
     data, error_response = validate_json_request(request)
     if error_response:
         return error_response
@@ -569,7 +550,7 @@ def generate_slide(request):
 
     if not topic:
         return JsonResponse(
-            {'error': 'Тақырып бос болмауы керек'},
+            {'error': 'Topic cannot be empty'},
             status=400
         )
 
@@ -578,7 +559,7 @@ def generate_slide(request):
 
         if not slide_text:
             return JsonResponse(
-                {'error': 'Контент генерацияланбады'},
+                {'error': 'Content was not generated'},
                 status=500
             )
 
@@ -600,60 +581,63 @@ def generate_slide(request):
 
     except Exception as e:
         return JsonResponse({
-            'error': f'Қате орын алды: {str(e)}',
-            'slide_text': 'Слайд жасау кезінде қате болды.'
+            'error': f'An error occurred: {str(e)}',
+            'slide_text': 'An error occurred while creating the slide.'
         }, status=500)
-# Ассистент помощник
-CHATBOT_SYSTEM_INSTRUCTION = """Сен BilimALL AI жобасының көмекші ассистентісің.
 
-BilimALL AI туралы ақпарат:
-- Бұл – информатика мен жаратылыстану пәндерін байланыстыратын AI платформасы
-- Қ.Жұбанов атындағы Ақтөбе өңірлік университетінде жасалған
-- 5-11 сыныптарға арналған
 
-Қызметтер:
-1. **BilimALL AI Chat** - Информатика тақырыптарын басқа пәндермен байланыстыру
-   - Тақырыпты енгізсе, okulyk.kz сайтынан байланысты тақырыптарды табады
-   - Пән, сынып, бет нөмірі, автор, баспа көрсетеді
+# ============ ASSISTANT CHATBOT ============
+CHATBOT_SYSTEM_INSTRUCTION = """You are the assistant of the BilimALL AI project.
 
-2. **Slide Generator** - Презентация генерациясы
-   - Информатика + жаратылыстану пәні байланысын көрсететін 5-7 слайд жасайды
-   - PowerPoint форматында жүктеледі
+About BilimALL AI:
+- This is an AI platform that connects Computer Science with natural science subjects
+- Created at Aktobe Regional University named after K. Zhubanov
+- Designed for grades 5-11
 
-3. **Тапсырма генераторы** - Тест/тапсырмалар құрастыру
-   - Форматтар: Тест, Тапсырмалар, Ашық сұрақтар, Ойын
-   - Word форматында жүктеледі
-   - Сынып деңгейіне сәйкес
+Services:
+1. **BilimALL AI Chat** - Connecting Computer Science topics with other subjects
+   - Enter a topic to find related topics from okulyk.kz
+   - Shows subject, grade, page number, author, publisher
 
-Қолдау көрсетілетін пәндер:
-- Информатика (5-11 сынып)
-- Физика, Математика (Алгебра, Геометрия), Химия, Биология, География
+2. **Slide Generator** - Presentation generation
+   - Creates 5-7 slides showing CS + natural science connections
+   - Downloaded in PowerPoint format
 
-Пайдалану нұсқаулығы:
-1. Басты беттен қажетті қызметті таңда
-2. Тақырып енгіз (мысалы: "Python циклдері")
-3. AI автоматты түрде нәтиже береді
+3. **Exercise Generator** - Creating tests/exercises
+   - Formats: Test, Exercises, Open Questions, Game
+   - Downloaded in Word format
+   - Matched to grade level
 
-Ескертпелер:
-- Барлық контент қазақ тілінде
-- Тек okulyk.kz сайтынан дерек алады
-- Нәтижелерді жүктеп алуға болады
+Supported subjects:
+- Computer Science (grades 5-11)
+- Physics, Mathematics (Algebra, Geometry), Chemistry, Biology, Geography
 
-Сенің міндетің:
-- Қысқа, нақты жауап бер
-- Эмодзи қолдан
-- Пайдаланушыға қызметтерді түсіндір
-- Қажет болса қадамдық нұсқаулық бер
-- Тақырыптан тыс сұрақтарға "Мен тек BilimALL AI туралы ақпарат бере аламын" де
+How to use:
+1. Select the desired service from the home page
+2. Enter a topic (e.g. "Python loops")
+3. AI will automatically generate a result
 
-Жауап стилі: Достық, кәсіби, қысқа"""
+Notes:
+- All content is in Kazakh
+- Data is sourced only from okulyk.kz
+- Results can be downloaded
+
+Your role:
+- Give short, clear answers
+- Use emojis
+- Explain services to users
+- Provide step-by-step instructions when needed
+- For off-topic questions, say "I can only provide information about BilimALL AI"
+
+Response style: Friendly, professional, concise"""
+
 
 @csrf_exempt
 def chatbot_assistant(request):
-    """Чатбот ассистент - BilimALL AI туралы сұрақтарға жауап береді"""
+    """Chatbot assistant - answers questions about BilimALL AI"""
     if request.method != "POST":
         return JsonResponse(
-            {"error": "⚠️ Тек POST сұранысы қолдау табады!"},
+            {"error": "⚠️ Only POST requests are supported!"},
             status=400
         )
 
@@ -663,40 +647,39 @@ def chatbot_assistant(request):
 
         if not user_message:
             return JsonResponse(
-                {"response": "⚠️ Хабарлама бос болмауы керек!"},
+                {"response": "⚠️ Message cannot be empty!"},
                 status=400
             )
 
-        # Кэштен тексеру
         cache_key = f"chatbot_{hash(user_message)}"
         cached_response = cache.get(cache_key)
 
         if cached_response:
             return JsonResponse({"response": cached_response})
 
-        # Gemini-ден жауап алу
         response_text = stream_gemini_response(
             user_message,
             system_instruction=CHATBOT_SYSTEM_INSTRUCTION
         )
 
-        # Кэшке сақтау (30 минут)
         cache.set(cache_key, response_text, 1800)
 
         return JsonResponse({"response": response_text})
 
     except json.JSONDecodeError:
         return JsonResponse(
-            {"error": "⚠️ JSON форматы қате!"},
+            {"error": "⚠️ Invalid JSON format!"},
             status=400
         )
 
     except Exception as e:
         return JsonResponse(
-            {"error": f"⚠️ Қате: {str(e)}"},
+            {"error": f"⚠️ Error: {str(e)}"},
             status=500
         )
-# ============ БЕТТІ КӨРСЕТУ ============
+
+
+# ============ PAGE VIEWS ============
 def index(request):
     return render(request, "steam/index.html")
 
